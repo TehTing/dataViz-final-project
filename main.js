@@ -23,8 +23,8 @@ function type(d) {
 
 
 
-// 可以指定 year_released, artist_type做篩選
-function filterData(d, year, artist_t) {
+function filterData(d) {
+    // 初步除去有空值、以及在2000年前發行的歌
     const result = d.filter(
         d => {
             return (
@@ -41,33 +41,36 @@ function filterData(d, year, artist_t) {
 
 
 
-// 為了建立 artist_type 和 year_released 列表而生
-function listMaker(dataClean){
-    // 產生藝術家類型列表
+function listMaker(dataClean) {
+    // 為了建立 artist_type 和 year_released 列表而生
+
+    // 產生藝術家類型列表 artistTypeList
     const artistTypeSet = new Set();
     dataClean.forEach(d => {
         artistTypeSet.add(d.artist_type);
     })
     const artistTypeList = Array.from(artistTypeSet);
-    console.log("藝術家類型列表",artistTypeList)
+    console.log("藝術家類型列表", artistTypeList)
 
-    // 產生發行年份列表
+
+    // 產生發行年份列表 yearReleasedList
     const yearReleasedSet = new Set();
     dataClean.forEach(d => {
         yearReleasedSet.add(d.year_released);
     })
     const yearReleasedList = Array.from(yearReleasedSet).sort();
-    console.log("發行年份列表",yearReleasedList)
-    // console.log([artistTypeList, yearReleasedList])
+    console.log("發行年份列表", yearReleasedList)
+
     return [artistTypeList, yearReleasedList];
 }
 
 
 
-// basis 代表使用什麼作為分類依據
 function classify(data, basis) {
+    // 選擇分類條件：0代表使用曲風區分；1代表使用藝術家區分；2代表不分類(單曲排行)
+
     // basis = 2 代表不分類，直接依單曲作人氣排行
-    if(basis==2){
+    if (basis == 2) {
         return data;
     }
 
@@ -76,7 +79,7 @@ function classify(data, basis) {
         data,
         v => d3.sum(v, leaf => leaf.pop),
         d => basis ? d.artist : d.top_genre
-    )   
+    )
     const dataArray = Array.from(dataMap, d => ({ basis: d[0], pop: d[1] }));
     return dataArray;
 }
@@ -87,7 +90,7 @@ function process(music) {
     // filter()初步除去有空值、以及在2000年前發行的歌
     let dataClean = filterData(music);
 
-    // 產生藝術家類型列表及發行年份列表
+    // 呼叫listmaker()，產生藝術家類型列表及發行年份列表
     const Lists = listMaker(dataClean);
     const artistTypeList = Lists[0];
     const yearReleasedList = Lists[1];
@@ -99,12 +102,13 @@ function process(music) {
 
 
     // classify()第二個參數：0代表使用曲風區分；1代表使用藝術家區分；2代表不分類(單曲排行)
-    const dataClassified = classify(dataClean, 0).sort(
+    const dataClassified = classify(dataClean, 0).sort(     // 參數可自己改
         (a, b) => {
             return d3.descending(a.pop, b.pop);
         }
     );
-    console.log("raw data",music);
+
+    console.log("raw data", music);
     console.log("filtered", dataClean);
     console.log("classified", dataClassified)
     return dataClassified;
