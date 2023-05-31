@@ -74,7 +74,7 @@ function classify(data, basis) {
         return data;
     }
 
-    // basis = 0代表使用曲風區分；1代表使用藝術家區分
+    // basis = 0代表使用曲風區分；1代表使用藝術家區分    //x軸 popularity y軸曲風 藝術家 單曲
     var dataMap = d3.rollup(
         data,
         v => d3.sum(v, leaf => leaf.pop),
