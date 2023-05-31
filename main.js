@@ -95,7 +95,7 @@ function classify(data, basis) {
 
 // 所有跟畫面有關的
 function setupCanvas(barChartData, dataClean){
-    let metric = 'pop';
+    let metric = "pop";
 
     function click(){
         metric = this.dataset.name;     /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
@@ -123,7 +123,7 @@ function setupCanvas(barChartData, dataClean){
         yAxisDraw.transition(transitionDelay).call(yAxis.scale(yScale));
 
         //Update header
-        header.select('tspan').text(`Top 15 ${metric} music ${metric === 'pop' ? '' : 'in CD'}`);
+        header.select('tspan').text(`Top 15 ${metric} music in Spotify`);
 
         //Update Bar
         bars.selectAll('.bar').data(data, d=>d.basis).join(
@@ -156,9 +156,6 @@ function setupCanvas(barChartData, dataClean){
         //     .on('mouseout',mouseout);
     }
 
-
-
-    
     const svg_width = 700;
     const svg_height = 500;
     const chart_margin = {top:80,right:40,bottom:40,left:80}; //留空間
@@ -310,13 +307,16 @@ function process(music) {
     dataClean = dataClean.filter(d => d.year_released == year && d.artist_type == artist_t)
 
 
-    // classify()第二個參數：0代表使用曲風區分；1代表使用藝術家區分；2代表不分類(單曲排行)
-    const dataClassified = classify(dataClean, 0).sort(     // 參數可自己改
-        (a, b) => {
-            return d3.descending(a.pop, b.pop);
-        }
-    );
-    setupCanvas(dataClassified);
+    
+    const dataClassified = chooseData("pop", dataClean);
+
+    // const dataClassified = classify(dataClean, 0).sort(     // 參數可自己改
+    //     (a, b) => {
+    //         return d3.descending(a.pop, b.pop);
+    //     }
+    // );
+
+    setupCanvas(dataClassified, dataClean);
     console.log("raw data", music);
     console.log("filtered", dataClean);
     console.log("classified", dataClassified);
@@ -324,8 +324,23 @@ function process(music) {
 }
 
 function chooseData(metric, dataClean){
-    const thisData = dataClean.sort((a,b)=>b[metric]-a[metric]).filter((d,i)=>i<10);
-    return thisData;
+    // classify()第二個參數：0代表使用曲風區分；1代表使用藝術家區分；2代表不分類(單曲排行)
+    var num;
+    if (metric == "pop"){
+        num = 0;
+    }else if (metric == "artist")
+    {
+        num = 1;
+    }else {
+        num = 2;
+    }
+    // console.log(num);
+    const dataClassified = classify(dataClean, num).sort(     // 參數可自己改
+        (a, b) => {
+            return d3.descending(a.pop, b.pop);
+        }
+    );
+    return dataClassified;
 }
 
 d3.csv('data/spotify.csv', type).then(
