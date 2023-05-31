@@ -184,3 +184,9 @@ d3.csv('data/spotify.csv', type).then(
         process(res);
     }
 );
+
+
+function darkmode() {
+    var element = document.body;
+    element.classList.toggle("dark");
+}
