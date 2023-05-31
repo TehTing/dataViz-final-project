@@ -124,7 +124,7 @@ function setupCanvas(barChartData, dataClean){
         yAxisDraw.transition(transitionDelay).call(yAxis.scale(yScale));
 
         //Update header
-        header.select('tspan').text(`Top 15 ${metric} movies ${metric === 'pop' ? '' : 'in $US'}`);
+        header.select('tspan').text(`Top 10 ${metric} music genres ${metric === 'pop' ? '' : 'in the world'}`);
 
         //Update Bar
         bars.selectAll('.bar').data(data, d=>d.top_genre).join(
@@ -192,7 +192,7 @@ let header = this_svg.append('g').attr('class','bar-header')
                         .append('text');
 
 header.append('tspan').text('Top 10 xxx artist');
-header.append('tspan').text('Years:2000-2009')
+header.append('tspan').text('Years:Since 2000')
       .attr('x',0)
       .attr('y',20).style('font-size','0.8em').style('fill','#555');
 

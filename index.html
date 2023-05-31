@@ -7,10 +7,23 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <script src="//unpkg.com/d3"></script>
-        <script src="main.js"></script>
-        <div>
-            <button onclick="darkmode()">切換暗黑模式</button>
+        <div class="bar-chart-container">
+            <div class="tooltip">
+                <div class="tip-header">
+                    <h3></h3>
+                    <h4></h4>
+                </div>
+            <script src="//unpkg.com/d3"></script>
+            <script src="main.js"></script>
+                <div>
+                    <ul>
+                        <li><a href = "#artist">Artist</a></li>
+                        <li><a href = "#pop"><button  data-name="pop">Popularity</button></a></li>
+                        <li><a href = "#genre"><button  data-name="genre">Genre</button></a></li>
+                        <li><a href = "#darkmode"><button onclick="darkmode()">切換暗黑模式</button></a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </body>
-</html>>
+</html>
