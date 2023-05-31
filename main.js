@@ -40,7 +40,8 @@ function filterData(d) {
                 d.artist &&
                 d.top_genre &&
                 d.pop > 0 &&
-                d.year_released > 2000
+                d.year_released > 2000 
+                // &&d.title && d.artist && d.top_genre === categories  分類(之後測試)
             )
         }
     )
@@ -92,10 +93,74 @@ function classify(data, basis) {
     return dataArray;
 }
 
-function setupCanvas(barChartData){
-    const svg_width = 400;
+// 所有跟畫面有關的
+function setupCanvas(barChartData, dataClean){
+
+
+    let metric = 'genre';
+
+    function click(){
+        metric = this.dataset.name;     /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
+        const thisData = chooseData(metric, dataClean);
+        update(thisData);
+    }
+
+    d3.selectAll('button').on('click',click);
+
+    function update(data){
+        console.log(data);
+        //Update Scale
+        xMax = d3.max(data, d=>d[metric]);
+        xScale_v3 = d3.scaleLinear([0,xMax],[0,chart_width]);
+        yScale = d3.scaleBand().domain(data.map(d=>d.top_genre))
+                                .rangeRound([0,chart_height])
+                                .paddingInner(0.25);
+        //Transition settings
+        const defaultDelay = 1000;
+        const transitionDelay = d3.transition().duration(defaultDelay);
+
+        //Update axis
+        xAxisDraw.transition(transitionDelay).call(xAxis.scale(xScale_v3));
+        yAxisDraw.transition(transitionDelay).call(yAxis.scale(yScale));
+
+        //Update header
+        header.select('tspan').text(`Top 15 ${metric} movies ${metric === 'pop' ? '' : 'in $US'}`);
+
+        //Update Bar
+        bars.selectAll('.bar').data(data, d=>d.top_genre).join(
+            enter=>{
+                enter.append('rect').attr('class','bar')
+                .attr('x',0).attr('y',d=>yScale(d.top_genre))
+                .attr('height',yScale.bandwidth())
+                .style('fill','lightcyan')
+                .transition(transitionDelay)
+                .delay((d,i)=>i*20)
+                .attr('width',d=>xScale_v3(d[metric]))
+                .style('fill','dodgerblue');
+            },
+            update =>{
+                update.transition(transitionDelay)
+                      .delay((d,i)=> i*20)
+                      .attr('y',d=> yScale(d.artist))
+                      .attr('width',d=>xScale_v3(d[metric]))
+            },
+            exit => {
+                exit.transition().duration(defaultDelay/2)
+                    .style('fill-opacity',0)
+                    .remove()
+            },
+        );
+
+        d3.selectAll('.bar')
+            .on('mouseover',mouseover)
+            .on('mousemove',mousemove)
+            .on('mouseout',mouseout);
+    }
+
+
+    const svg_width = 700;
     const svg_height = 500;
-    const chart_margin = {top:80,right:40,bottom:40,left:80}; //留空間
+    const chart_margin = {top:80,right:80,bottom:40,left:230}; //留空間
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
     const chart_height = svg_height - (chart_margin.top + chart_margin.bottom);
 
@@ -108,49 +173,107 @@ function setupCanvas(barChartData){
     //debugger;
     const xScale_v1 = d3.scaleLinear().domain(xExtent).range([0, chart_width]);    
     //only max
-    const xMax = d3.max(barChartData, d=>d.pop);
-    const xScale_v2 = d3.scaleLinear().domain([0,xMax]).range([0, chart_width]);
+    let xMax = d3.max(barChartData, d=>d.pop);
+    let xScale_v2 = d3.scaleLinear().domain([0,xMax]).range([0, chart_width]);
     //簡潔一點
-    const xScale_v3 = d3.scaleLinear([0,xMax],[0, chart_width]);
+    let xScale_v3 = d3.scaleLinear([0,xMax],[0, chart_width]);
     
-    const yScale = d3.scaleBand().domain(barChartData.map(d=>d.top_genre))
+
+    let yScale = d3.scaleBand().domain(barChartData.map(d=>d.genre))
                                 .rangeRound([0,chart_height])
-                                .paddingInner(0.25);
+                                .paddingInner(0.15);
     console.log(yScale.bandwidth());
 
-    //Draw bars
-    const bars = this_svg.selectAll('.bar')
-                         .data(barChartData)
-                         .enter()//把圖顯示出來
-                         .append('rect')
-                         .attr('class','bar')
-                         .attr('x',0)
-                         .attr('y',d=>yScale(d.top_genre))
-                         .attr('width',d=>xScale_v3(d.pop))
-                         .attr('height',yScale.bandwidth())
-                         .style('fill','dodgerblue'); 
+    
+    const bars = this_svg.append('g').attr('class','bars');
                          
-const header = this_svg.append('g').attr('class','bar-header')
+let header = this_svg.append('g').attr('class','bar-header')
                         .attr('transform',`translate(0,${-chart_margin.top/2})`)
                         .append('text');
-header.append('tspan').text('Total popularity by genre');
-header.append('tspan').text('Years:Since 2000')
+
+header.append('tspan').text('Top 10 xxx artist');
+header.append('tspan').text('Years:2000-2009')
       .attr('x',0)
       .attr('y',20).style('font-size','0.8em').style('fill','#555');
 
-const xAxis = d3.axisTop(xScale_v3)
+let xAxis = d3.axisTop(xScale_v3).ticks(5)    
                 .tickFormat(formatTicks)
                 .tickSizeInner(-chart_height)
                 .tickSizeOuter(0);
-const xAxisDraw = this_svg.append('g').attr('class','x axis').call(xAxis);
-
-const yAxis = d3.axisLeft(yScale).tickSize(0);
-const yAxisDraw = this_svg.append('g').attr('class','y axis').call(yAxis);
+let xAxisDraw = this_svg.append('g').attr('class','x axis');
+let yAxis = d3.axisLeft(yScale).tickSize(0);
+let yAxisDraw = this_svg.append('g').attr('class','y axis');
 yAxisDraw.selectAll('text').attr('dx','-0.6em');
+update(barChartData);
+
+    const tip = d3.select('.tooltip');
+
+    function mouseover(e){ //tip的位置
+
+        //get data
+        const thisBarData = d3.select(this).data()[0];
+        //debugger;
+
+
+        // bodyData(之後想...)
+        // const bodyData = [
+        //     ['Budget',formatTicks(thisBarData.budget)],
+        //     ['Revenue',formatTicks(thisBarData.revenue)],
+        //     ['Profit',formatTicks(thisBarData.revenue - thisBarData.budget)],
+        //     ['TMDB Popularity',Math.round(thisBarData.popularity)],
+        //     ['IMDB Rating', thisBarData.vote_average],
+        //     ['Genres',thisBarData.genres.join(', ')],
+        // ];
+
+
+
+        tip.style('left',e.clientX+'px')    //e.clientX、Y是跟著滑鼠的位置
+           .style('top',e.clientY+'px')
+           .transition()
+           .style('opacity',0.98)
+            
+           tip.select('h3').html(`${thisBarData.top_genre}, ${thisBarData.release_year}`);
+           tip.select('h4').html(`${thisBarData.tagline}, ${thisBarData.runtime} min.`);
+            d3.select('.tip-body').selectAll('p').data(bodyData)
+            .join('p').attr('class','tip-info')
+            .html(d=>`${d[0]} :${d[1]}`);
+    }
+
+    function mousemove(e){                      //較平順
+        tip.style('left',(e.clientX+15)+'px')
+           .style('top',e.clientY+'px')
+    }
+
+    function mouseout(e){
+        tip.transition()
+            .style('opacity',0);
+    }
+
+    
 }
 
-
+//Main//readyFunction
+// 產業分類功能(之後試能不能跑...)
+// var categories = "其他";
 function process(music) {
+
+    // var button = document.querySelector('.prompttest');
+    // var showtxt = document.querySelector('.show');
+
+    // function popup(e) {
+    //     var typecategory = window.prompt('請輸入欲查詢音樂類別');
+    //     if (typeCategory == null || "") {
+    //         showtxt.innerHTML = '您已取消輸入'
+    //         }
+    //         else{
+    //             categories = typeCategory;
+    //             showtxt.innerHTML = "目前查詢的音樂類別為: " + typeCategory;
+    //         }
+    //         const dataClean = filterData(d);
+    //         setupCanvas(dataClassified);
+    //     }
+    //     button.addEventListener('click',popup); //產業分類功能
+    
     // filter()初步除去有空值、以及在2000年前發行的歌
     let dataClean = filterData(music);
 
@@ -178,6 +301,10 @@ function process(music) {
     return dataClassified;
 }
 
+function chooseData(metric, dataClean){
+    const thisData = dataClean.sort((a,b)=>b[metric]-a[metric]).filter((d,i)=>i<10);
+    return thisData;
+}
 
 d3.csv('data/spotify.csv', type).then(
     res => {
@@ -185,7 +312,7 @@ d3.csv('data/spotify.csv', type).then(
     }
 );
 
-
+// 暗黑模式
 function darkmode() {
     var element = document.body;
     element.classList.toggle("dark");
