@@ -122,7 +122,7 @@ function setupCanvas(barChartData){
         // 前15筆資料
         yScale = d3.scaleBand().domain(data.map(d=>d.basis).slice(0, 15))
                                 .rangeRound([0,chart_height])
-                                .paddingInner(0.25);
+                                .paddingInner(0.25).paddingOuter(0);
           
         //Transition settings
         const defaultDelay = 1000;
@@ -137,7 +137,9 @@ function setupCanvas(barChartData){
             .style('fill','#ec0000')
        
         //Update Bar
-        bars.selectAll('.bar').data(data, d=>d.basis).join(
+        bars.selectAll('.bar')
+        .data(data.slice(0, 15), d => d.basis)
+        .join(
             enter=>{
                 enter.append('rect').attr('class','bar')
                 .attr('x',0).attr('y',d=>yScale(d.basis))
@@ -167,10 +169,19 @@ function setupCanvas(barChartData){
         function mouseover(e){
             //get data
             const thisBarData = d3.select(this).data()[0];
+            const bodyData = [
+                ['Title', thisBarData.title],
+                ['Artist', thisBarData.artist],
+                ['Top Genre', thisBarData.top_genre],
+                ['Year Release', thisBarData.year_released]
+            ];
+
+
             // console.log(thisBarData);
 
             tip.style('left',(e.clientX+15)+'px')
                .style('top',e.clientY+'px')
+               .transition()
                .style('opacity',0.98)
  
             //    d.title &&
@@ -178,9 +189,13 @@ function setupCanvas(barChartData){
             //     d.top_genre &&
             //     d.pop > 0 &&
             //     d.year_released > 2000 
-            console.log(thisBarData);
+            // console.log(thisBarData);
             tip.select('h3').html(`${thisBarData.basis}: <br>${thisBarData.pop} view(s)`);
-            // tip.select('h4').html(`${thisBarData.tagline}, ${thisBarData.runtime} min.`)
+
+
+            d3.select('.tip-body').selectAll('p').data(bodyData)
+                .join('p').attr('class', 'tip-info')
+                .html(d=>`${d[0]}:${d[1]}`);
         }
 
         function mousemove(e){
@@ -189,13 +204,14 @@ function setupCanvas(barChartData){
         }
 
         function mouseout(e){
-            tip.style('opacity',0)
+            tip.transition()
+               .style('opacity',0)
         }
         //interactive 新增監聽
         d3.selectAll('.bar')
             .on('mouseover',mouseover)
             .on('mousemove',mousemove)
-            // .on('mouseout',mouseout);
+            .on('mouseout',mouseout);
     }
 
     const svg_width = 500;
