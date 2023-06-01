@@ -163,23 +163,6 @@ function setupCanvas(barChartData, dataClean){
         //     .on('mouseover',mouseover)
         //     .on('mousemove',mousemove)
         //     .on('mouseout',mouseout);
-
-
-        // interactive 互動處理
-        const tip = d3.select('.tooltip');
-
-        function mouseover(e){
-            //get data
-            const thisBarData = d3.select(this).data()[0];
-
-
-            tip.style('left', (e.clientX+15) + 'px')
-                .style('top', e.clientY+'px')
-                .style('opacity', 0.98)
-                .html("Hello")
-        }
-        d3.selectAll('.bar').on('mouseover', mouseover);
-
     }
 
     const svg_width = 500;
@@ -251,40 +234,37 @@ function setupCanvas(barChartData, dataClean){
     yAxisDraw.selectAll('text').attr('dx','-0.6em');
     update(barChartData);
 
-
-    
+    // const tip = d3.select('.tooltip');
 
     // function mouseover(e){ //tip的位置
 
-    // //     //get data
+    //     //get data
     //     const thisBarData = d3.select(this).data()[0];
     //     //debugger;
 
 
-    // //     // bodyData(之後想...)
-    // //     // const bodyData = [
-    // //     //     ['Budget',formatTicks(thisBarData.budget)],
-    // //     //     ['Revenue',formatTicks(thisBarData.revenue)],
-    // //     //     ['Profit',formatTicks(thisBarData.revenue - thisBarData.budget)],
-    // //     //     ['TMDB Popularity',Math.round(thisBarData.popularity)],
-    // //     //     ['IMDB Rating', thisBarData.vote_average],
-    // //     //     ['Genres',thisBarData.genres.join(', ')],
-    // //     // ];
+    //     // bodyData(之後想...)
+    //     // const bodyData = [
+    //     //     ['Budget',formatTicks(thisBarData.budget)],
+    //     //     ['Revenue',formatTicks(thisBarData.revenue)],
+    //     //     ['Profit',formatTicks(thisBarData.revenue - thisBarData.budget)],
+    //     //     ['TMDB Popularity',Math.round(thisBarData.popularity)],
+    //     //     ['IMDB Rating', thisBarData.vote_average],
+    //     //     ['Genres',thisBarData.genres.join(', ')],
+    //     // ];
 
 
 
-    //     tip.style('left',(e.clientX+15)+'px')    //e.clientX、Y是跟著滑鼠的位置
+    //     tip.style('left',e.clientX+'px')    //e.clientX、Y是跟著滑鼠的位置
     //        .style('top',e.clientY+'px')
     //        .transition()
     //        .style('opacity',0.98)
-    //        .html("Hello")
             
-    // //        tip.select('h3').html(`${thisBarData.top_genre}, ${thisBarData.release_year}`);
-    // //        tip.select('h4').html(`${thisBarData.tagline}, ${thisBarData.runtime} min.`);
-    // //         d3.select('.tip-body').selectAll('p').data(bodyData)
-    // //         .join('p').attr('class','tip-info')
-    // //         .html(d=>`${d[0]} :${d[1]}`);
-    //     d3.selectAll(".bar").on('mouseover', mouseover);
+    //        tip.select('h3').html(`${thisBarData.top_genre}, ${thisBarData.release_year}`);
+    //        tip.select('h4').html(`${thisBarData.tagline}, ${thisBarData.runtime} min.`);
+    //         d3.select('.tip-body').selectAll('p').data(bodyData)
+    //         .join('p').attr('class','tip-info')
+    //         .html(d=>`${d[0]} :${d[1]}`);
     // }
 
     // function mousemove(e){                      //較平順

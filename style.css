@@ -70,11 +70,9 @@ svg{
     stroke: white
 }
 
-
-/*interactive 詳細資訊視窗設定*/
 .tooltip{
     position: fixed;
-    /* z-index: 10;            最上層 */
+    z-index: 10;            /*最上層*/
     opacity: 0;
     pointer-events: none;
     background: #eee;
@@ -87,7 +85,7 @@ svg{
 }
 
 .tip-body{
-    padding: 0.2rem 0;     
+    padding: 0.2rem;     
 }
 
 h3,h4{
@@ -100,14 +98,8 @@ h4{
     font-weight: normal;
 }
 
-
 .tip-info{
     margin:0;
     padding: 0.3rem 1em;
     font-size: 0.8em;
-}
-
-/*偶數元素設定不同背景樣式*/
-.tip-info:nth-of-type(even){
-    background: #e0e0e0;
 }
