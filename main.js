@@ -98,9 +98,12 @@ function setupCanvas(barChartData, dataClean){
     let metric = "pop";
 
     function click(){
-        metric = this.dataset.name;     /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
+        metric = this.dataset.name;   
+        console.log(metric)  
         if (metric == "dark") return;
-        const thisData = chooseData(metric, dataClean);
+
+        /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
+        const thisData = chooseData(metric, dataClean);  
         update(thisData);
     }
 
@@ -109,7 +112,9 @@ function setupCanvas(barChartData, dataClean){
     function update(data){
         console.log(data);
         //Update Scale
-        xMax = d3.max(data, d=>d[metric]);
+        xMax = d3.max(data, d=>d.pop);
+        console.log(xMax);
+        
         xScale_v3 = d3.scaleLinear([0,xMax],[0,chart_width]);
         
         // 前15筆資料
@@ -138,14 +143,14 @@ function setupCanvas(barChartData, dataClean){
                 .style('fill','lightcyan')
                 .transition(transitionDelay)
                 .delay((d,i)=>i*20)
-                .attr('width',d=>xScale_v3(d[metric]))
+                .attr('width',d=>xScale_v3(d.pop))
                 .style('fill','dodgerblue');
             },
             update =>{
                 update.transition(transitionDelay)
                       .delay((d,i)=> i*20)
                       .attr('y',d=> yScale(d.basis))
-                      .attr('width',d=>xScale_v3(d[metric]))
+                      .attr('width',d=>xScale_v3(d.pop))
             },
             exit => {
                 exit.transition().duration(defaultDelay/2)
