@@ -1,15 +1,24 @@
 .dark{
     background-color: #212121;
-    color: #ec0000;
+    color: #1ED760;
     
 }
-
+img {
+    height: 80px;
+    width: 80px;
+    border-radius: 15px;
+    position: relative;
+    top: 15px;
+    left:30px;
+}
 h1 {
-    background-color: lightblue; 
+    background-color: #000000;
+    color:#1ED760; 
     display: inline;
+    border-radius: 15px;
     position: relative;
     top :10px;
-    left: 160px;
+    left: 120px;
 }
 /* body{
 	background-image: url("https://cdn.pixabay.com/photo/2017/07/10/18/47/background-2491008_960_720.png");
@@ -44,14 +53,14 @@ h1 {
 } */
 
 button {
-    background-color: lightblue;
+    background-color: #1ED760;
     border: none;
     font-size: 18px;
     height:170px
 }
 
 button:hover {
-    background-color: cadetblue;
+    background-color: #008000;
     color :white;
 }
 
@@ -67,7 +76,7 @@ button:hover {
 }
 
 svg{
-    border :5px solid lightblue;
+    border :5px solid #1ED760;
 }
 
 .axis .domain{
@@ -121,7 +130,7 @@ h4{
     width: 60px;
     height: 34px;
     top: 3px;
-    left: 250px;
+    left: 200px;
   }
   
   /* Hide default HTML checkbox */
