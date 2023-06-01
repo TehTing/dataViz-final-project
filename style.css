@@ -78,9 +78,10 @@ svg{
     stroke: white
 }
 
+/*interactive 詳細資訊視窗設定*/
 .tooltip{
     position: fixed;
-    z-index: 10;            /*最上層*/
+    /* z-index: 10;            最上層 */
     opacity: 0;
     pointer-events: none;
     background: #eee;
@@ -93,7 +94,7 @@ svg{
 }
 
 .tip-body{
-    padding: 0.2rem;     
+    padding: 0.2rem 0;     
 }
 
 h3,h4{
@@ -177,3 +178,8 @@ h4{
   .slider.round:before {
     border-radius: 50%;
   }
+
+/*偶數元素設定不同背景樣式*/
+.tip-info:nth-of-type(even){
+    background: #e0e0e0;
+}
