@@ -95,8 +95,9 @@ function classify(data, basis) {
 }
 
 // 所有跟畫面有關的
-function setupCanvas(barChartData, dataClean){
+function setupCanvas(barChartData){
     let metric = "pop";
+    const thisData = chooseData(metric, barChartData);  
 
     function click(){
         metric = this.dataset.name;   
@@ -104,7 +105,7 @@ function setupCanvas(barChartData, dataClean){
         if (metric == "dark") return;
 
         /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
-        const thisData = chooseData(metric, dataClean);  
+        const thisData = chooseData(metric, barChartData);  
         update(thisData);
     }
 
@@ -159,10 +160,41 @@ function setupCanvas(barChartData, dataClean){
             },
         );
 
-        // d3.selectAll('.bar')
-        //     .on('mouseover',mouseover)
-        //     .on('mousemove',mousemove)
-        //     .on('mouseout',mouseout);
+        //interactive 互動處理
+        const tip = d3.select('.tooltip');
+
+        function mouseover(e){
+            //get data
+            const thisBarData = d3.select(this).data()[0];
+            // console.log(thisBarData);
+
+            tip.style('left',(e.clientX+15)+'px')
+               .style('top',e.clientY+'px')
+               .style('opacity',0.98)
+ 
+            //    d.title &&
+            //     d.artist &&
+            //     d.top_genre &&
+            //     d.pop > 0 &&
+            //     d.year_released > 2000 
+            console.log(thisBarData);
+            tip.select('h3').html(`${thisBarData.basis}: <br>${thisBarData.pop} view(s)`);
+            // tip.select('h4').html(`${thisBarData.tagline}, ${thisBarData.runtime} min.`)
+        }
+
+        function mousemove(e){
+            tip.style('left',(e.clientX+15)+'px')
+               .style('top',e.clientY+'px')
+        }
+
+        function mouseout(e){
+            tip.style('opacity',0)
+        }
+        //interactive 新增監聽
+        d3.selectAll('.bar')
+            .on('mouseover',mouseover)
+            .on('mousemove',mousemove)
+            // .on('mouseout',mouseout);
     }
 
     const svg_width = 500;
@@ -188,8 +220,6 @@ function setupCanvas(barChartData, dataClean){
 
 
     // y-axis
-
-
     let yScale = d3.scaleBand().domain(barChartData.map(d=>d.basis).slice(0, 15))
                                 .rangeRound([0,chart_height])
                                 .paddingInner(0.30);
@@ -232,7 +262,7 @@ function setupCanvas(barChartData, dataClean){
     //                 .call(yAxis);
     let yAxisDraw = this_svg.append('g').attr('class','y axis');
     yAxisDraw.selectAll('text').attr('dx','-0.6em');
-    update(barChartData);
+    update(thisData);
 
     // const tip = d3.select('.tooltip');
 
@@ -321,13 +351,7 @@ function process(music) {
     
     const dataClassified = chooseData("pop", dataClean);
 
-    // const dataClassified = classify(dataClean, 0).sort(     // 參數可自己改
-    //     (a, b) => {
-    //         return d3.descending(a.pop, b.pop);
-    //     }
-    // );
-
-    setupCanvas(dataClassified, dataClean);
+    setupCanvas(dataClean);
     console.log("raw data", music);
     console.log("filtered", dataClean);
     console.log("classified", dataClassified);
