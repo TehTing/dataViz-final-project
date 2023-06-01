@@ -111,6 +111,9 @@ function setupCanvas(barChartData){
 
     d3.selectAll('button').on('click',click);
 
+    
+
+
     function update(data){
         console.log(data);
         //Update Scale
@@ -148,7 +151,7 @@ function setupCanvas(barChartData){
                 .transition(transitionDelay)
                 .delay((d,i)=>i*20)
                 .attr('width',d=>xScale_v3(d.pop))
-                .style('fill','lightblue');
+                .style('fill','lightblue')
             },
             update =>{
                 update.transition(transitionDelay)
@@ -161,7 +164,9 @@ function setupCanvas(barChartData){
                     .style('fill-opacity',0)
                     .remove()
             },
-        );
+        )
+
+        
 
         //interactive 互動處理
         const tip = d3.select('.tooltip');
@@ -207,11 +212,25 @@ function setupCanvas(barChartData){
             tip.transition()
                .style('opacity',0)
         }
+
+        // 點擊事件處理程序
+        function handleClick(d, i) {
+            const thisBarData = d3.select(this).data()[0];   
+            var pop = d.pop;
+            // console.log("點擊的柱形資訊：", thisBarData.basis);
+            // console.log("柱形的數值：", thisBarData.pop);
+            
+
+            // 搜尋歌曲
+            var songName = thisBarData.basis;
+            searchMusic(songName);
+        }
         //interactive 新增監聽
         d3.selectAll('.bar')
             .on('mouseover',mouseover)
             .on('mousemove',mousemove)
-            .on('mouseout',mouseout);
+            .on('mouseout',mouseout)
+            .on('click',handleClick);
     }
 
     const svg_width = 500;
@@ -243,7 +262,8 @@ function setupCanvas(barChartData){
     console.log(yScale.bandwidth());
 
     
-    const bars = this_svg.append('g').attr('class', 'bars');
+    const bars = this_svg.append('g').attr('class', 'bars')
+                         //.on('click',handleClick); // 添加點擊事件監聽器
                         //  .selectAll('.bar')
                         //  .data(barChartData)
                         //  .enter()
@@ -326,6 +346,41 @@ function setupCanvas(barChartData){
     // }
 
     
+}
+
+
+
+function searchMusic(songName){
+    // 設定 YouTube Data API 金鑰
+    var apiKey = "YOUR_YOUTUBE_API_KEY";
+    
+    
+    function searchSong(songName) {
+        var apiUrl = "https://www.googleapis.com/youtube/v3/search";
+        var params = {
+            part: "snippet",
+            q: songName,
+            key: apiKey,
+            maxResults: 1,
+            type: "video"
+        };
+        console.log(params);
+        // d3.json(apiUrl)
+        //   .header("X-Requested-With", "XMLHttpRequest")
+        //   .get(params)
+        //   .then(function(response) {
+        //         var videoId = response.items[0].id.videoId;
+        //         var videoUrl = "https://www.youtube.com/watch?v=" + videoId;
+        //         console.log("歌曲名稱：" + songName);
+        //         console.log("歌曲連結：" + videoUrl);
+        //     })
+        //   .catch(function(error) {
+        //     console.log("發生錯誤：" + error);
+        //  });
+    }
+
+    // 搜索歌曲並獲取連結
+    searchSong(songName);
 }
 
 
