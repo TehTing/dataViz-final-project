@@ -1,6 +1,6 @@
 .dark{
     background-color: #212121;
-    color: white;
+    color: rgb(255, 0, 0);
 }
 
 h1 {
@@ -57,8 +57,7 @@ li a button:hover {
 }
 
 svg{
-    border :1px solid #ccc
-    
+    border :1px solid #ccc;
 }
 
 .axis .domain{

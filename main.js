@@ -99,6 +99,7 @@ function setupCanvas(barChartData, dataClean){
 
     function click(){
         metric = this.dataset.name;     /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
+        if (metric == "dark") return;
         const thisData = chooseData(metric, dataClean);
         update(thisData);
     }
@@ -110,10 +111,13 @@ function setupCanvas(barChartData, dataClean){
         //Update Scale
         xMax = d3.max(data, d=>d[metric]);
         xScale_v3 = d3.scaleLinear([0,xMax],[0,chart_width]);
-
-        yScale = d3.scaleBand().domain(data.map(d=>d.basis))
+        
+        // 前15筆資料
+        yScale = d3.scaleBand().domain(data.map(d=>d.basis).slice(0, 15))
                                 .rangeRound([0,chart_height])
                                 .paddingInner(0.25);
+        
+                        
         //Transition settings
         const defaultDelay = 1000;
         const transitionDelay = d3.transition().duration(defaultDelay);
@@ -156,9 +160,9 @@ function setupCanvas(barChartData, dataClean){
         //     .on('mouseout',mouseout);
     }
 
-    const svg_width = 700;
+    const svg_width = 500;
     const svg_height = 500;
-    const chart_margin = {top:80,right:40,bottom:40,left:80}; //留空間
+    const chart_margin = {top:100,right:40,bottom:40,left:100}; //留空間
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
     const chart_height = svg_height - (chart_margin.top + chart_margin.bottom);
 
@@ -179,9 +183,11 @@ function setupCanvas(barChartData, dataClean){
 
 
     // y-axis
-    let yScale = d3.scaleBand().domain(barChartData.map(d=>d.basis))
+
+
+    let yScale = d3.scaleBand().domain(barChartData.map(d=>d.basis).slice(0, 15))
                                 .rangeRound([0,chart_height])
-                                .paddingInner(0.15);
+                                .paddingInner(0.30);
     console.log(yScale.bandwidth());
 
     
@@ -325,13 +331,13 @@ function process(music) {
 
 function chooseData(metric, dataClean){
     // classify()第二個參數：0代表使用曲風區分；1代表使用藝術家區分；2代表不分類(單曲排行)
-    var num;
+    var num = -1;
     if (metric == "pop"){
         num = 0;
     }else if (metric == "artist")
     {
         num = 1;
-    }else {
+    }else if (metric == "genre"){
         num = 2;
     }
     // console.log(num);
