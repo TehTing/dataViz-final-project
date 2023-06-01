@@ -80,7 +80,8 @@ function classify(data, basis) {
 
     // basis = 2 代表不分類，直接依單曲作人氣排行
     if (basis == 2) {
-        return data;
+        const dataArray = Array.from(data, d => ({ basis: d.title, pop: d.pop}));
+        return dataArray;
     }
 
     // basis = 0代表使用曲風區分；1代表使用藝術家區分    //x軸 popularity y軸曲風 藝術家 單曲
@@ -116,13 +117,12 @@ function setupCanvas(barChartData, dataClean){
         console.log(xMax);
         
         xScale_v3 = d3.scaleLinear([0,xMax],[0,chart_width]);
-        
+
         // 前15筆資料
         yScale = d3.scaleBand().domain(data.map(d=>d.basis).slice(0, 15))
                                 .rangeRound([0,chart_height])
                                 .paddingInner(0.25);
-        
-                        
+          
         //Transition settings
         const defaultDelay = 1000;
         const transitionDelay = d3.transition().duration(defaultDelay);
@@ -133,7 +133,7 @@ function setupCanvas(barChartData, dataClean){
 
         //Update header
         header.select('tspan').text(`Top 15 ${metric} music in Spotify`);
-
+       
         //Update Bar
         bars.selectAll('.bar').data(data, d=>d.basis).join(
             enter=>{
@@ -357,12 +357,12 @@ function process(music) {
 function chooseData(metric, dataClean){
     // classify()第二個參數：0代表使用曲風區分；1代表使用藝術家區分；2代表不分類(單曲排行)
     var num = -1;
-    if (metric == "pop"){
+    if (metric == "genre"){
         num = 0;
     }else if (metric == "artist")
     {
         num = 1;
-    }else if (metric == "genre"){
+    }else if (metric == "pop"){
         num = 2;
     }
     // console.log(num);
