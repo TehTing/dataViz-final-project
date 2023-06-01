@@ -447,7 +447,7 @@ function chooseData(metric, dataClean){
         (a, b) => {
             return d3.descending(a.pop, b.pop);
         }
-    );
+    ).filter((d,i)=>i<15);
     return dataClassified;
 }
 
