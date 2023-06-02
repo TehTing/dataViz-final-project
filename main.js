@@ -386,31 +386,26 @@ function setupCanvas(ChartData){
 
 function searchMusic(songName){
     // 設定 YouTube Data API 金鑰
-    var apiKey = "YOUR_YOUTUBE_API_KEY";
+    var apiKey = "AIzaSyBLzgWDtCNgwxtUC2XjXMPmUK9ld08vIcw";
     
     
     function searchSong(songName) {
-        var apiUrl = "https://www.googleapis.com/youtube/v3/search";
-        var params = {
-            part: "snippet",
-            q: songName,
-            key: apiKey,
-            maxResults: 1,
-            type: "video"
-        };
-        console.log(params);
-        // d3.json(apiUrl)
-        //   .header("X-Requested-With", "XMLHttpRequest")
-        //   .get(params)
-        //   .then(function(response) {
-        //         var videoId = response.items[0].id.videoId;
-        //         var videoUrl = "https://www.youtube.com/watch?v=" + videoId;
-        //         console.log("歌曲名稱：" + songName);
-        //         console.log("歌曲連結：" + videoUrl);
-        //     })
-        //   .catch(function(error) {
-        //     console.log("發生錯誤：" + error);
-        //  });
+       
+        // 使用d3.json發起API請求
+        d3.json(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(songName)}&type=video&key=${apiKey}`)
+          .then(function(response) {
+            // 从返回的数据中提取视频 ID
+            const videoId = response.items[0].id.videoId;
+            
+            // 构建 YouTube 视频链接
+            const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
+            
+            // 打印链接或执行其他操作
+            console.log(videoLink);
+          })
+          .catch(function(error) {
+            console.error('Error:', error);
+          });
     }
 
     // 搜索歌曲並獲取連結
