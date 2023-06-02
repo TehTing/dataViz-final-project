@@ -199,3 +199,15 @@ h4{
     width:250px;
     height: 300px;
 }
+
+
+/*音樂撥放配置*/
+.music-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.music-item button {
+    margin-left: 10px;
+}

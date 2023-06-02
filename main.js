@@ -111,6 +111,48 @@ function pieChart(data){
     
 }
 
+
+/*無法顯示，待修理*/ 
+function playMusic(songs){
+    // var container = d3.select("#player");
+    // var player;
+
+    // function onYouTubeIframeAPIReady() {
+    //   player = new YT.Player("player", {
+    //     height: "360",
+    //     width: "640",
+    //     videoId: songs[0].videoId, // 默认播放第一首歌曲
+    //     events: {
+    //       onReady: onPlayerReady
+    //     }
+    //   });
+    // }
+
+    // function onPlayerReady(event) {
+    //   // 可以在此处添加其他代码或事件处理程序
+    //   // 在播放器准备好后，可以创建一个音乐列表，点击列表中的音乐将播放相应的视频
+    //   var musicList = d3.select("body").append("ul");
+
+    //   musicList
+    //     .selectAll("li")
+    //     .data(songs)
+    //     .enter()
+    //     .append("li")
+    //     .text(function(d) { return d.name + " - " + d.artist; })
+    //     .on("click", function(d) {
+    //       player.loadVideoById(d.videoId);
+    //     });
+
+    //   musicList
+    //     .selectAll("li")
+    //     .append("img")
+    //     .attr("src", function(d) { return d.pictureUrl; })
+    //     .attr("class", "thumbnail");
+    // }
+}
+
+
+
 // 所有跟畫面有關的
 function setupCanvas(ChartData){
     let metric = "pop";
@@ -390,24 +432,40 @@ function searchMusic(songName){
     
     
     function searchSong(songName) {
-       
         // 使用d3.json發起API請求
         d3.json(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(songName)}&type=video&key=${apiKey}`)
           .then(function(response) {
-            // 从返回的数据中提取视频 ID
+            // 從返回的數據中提取連結 ID
             const videoId = response.items[0].id.videoId;
+
+            // 取得歌曲名，歌手名
+            const songTitle = response.items[0].snippet.title;
+            const artistName = response.items[0].snippet.channelTitle;
+
+            // 取得預覽圖片
+            const thumbnailUrl = response.items[0].snippet.thumbnails.default.url;
             
-            // 构建 YouTube 视频链接
+            // 取得 YouTube 影片連結
             const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
+
             
             // 打印链接或执行其他操作
-            console.log(videoLink);
-          })
+            console.log('Song:', songTitle);
+            console.log('Artist:', artistName);
+            console.log('Video Link:', videoLink);
+            // console.log('Thumbnail URL:', thumbnailUrl);
+
+            // 轉換為mp3格式
+            var songs = [
+                { name: songTitle, artist: artistName, url:videoLink , pictureUrl: thumbnailUrl, videoId: videoId}
+            ];
+            playMusic(songs);
+          }) 
           .catch(function(error) {
             console.error('Error:', error);
           });
     }
-
+   
     // 搜索歌曲並獲取連結
     searchSong(songName);
 }
