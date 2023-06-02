@@ -90,7 +90,7 @@ function classify(data, basis) {
         v => d3.sum(v, leaf => leaf.pop),
         d => basis ? d.artist : d.top_genre
     )
-    const dataArray = Array.from(dataMap, d => ({ basis: d[0], pop: d[1],top_genre:d.top_genre,year_released:d.year_released,artist:d.artist }));
+    const dataArray = Array.from(dataMap, d => ({ basis: d[0], pop: d[1] }));
     return dataArray;
 }
 
