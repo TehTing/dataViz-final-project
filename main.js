@@ -170,7 +170,7 @@ function setupCanvas(ChartData){
 
         //Update header
         header.select('tspan').text(`Top 15 ${metric} music in Spotify`)
-            .style('fill','#ec0000')
+            .style('fill','#1ED760')
        
         //Update Bar
         bars.selectAll('.bar')
@@ -180,11 +180,11 @@ function setupCanvas(ChartData){
                 enter.append('rect').attr('class','bar')
                 .attr('x',0).attr('y',d=>yScale(d.basis))
                 .attr('height',yScale.bandwidth())
-                .style('fill','lightcyan')
+                .style('fill','1ED760')
                 .transition(transitionDelay)
                 .delay((d,i)=>i*20)
                 .attr('width',d=>xScale_v3(d.pop))
-                .style('fill','lightblue')
+                .style('fill','#1ED760')
             },
             update =>{
                 update.transition(transitionDelay)
@@ -314,10 +314,10 @@ function setupCanvas(ChartData){
                             .append('text');
 
     header.append('tspan').text('Top 10 XXX songs')
-        .style('fill','#ec0000')
-    header.append('tspan').text('Years:2000-2009')
+        .style('fill','#1ED760')
+    header.append('tspan').text('Years:Since 2000')
         .attr('x',0)
-        .attr('y',20).style('font-size','0.8em').style('fill','#ec0000');
+        .attr('y',20).style('font-size','0.8em').style('fill','#1ED760');
 
     let xAxis = d3.axisTop(xScale_v3).ticks(5)    
                     .tickFormat(formatTicks)
