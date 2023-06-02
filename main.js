@@ -1,6 +1,6 @@
 //Data tools
 function formatTicks(d){
-    return d3.format('~s')(d)
+    return d3.format('.2s')(d)
     .replace('M','mil')
     .replace('G','bil')
     .replace('T','tri')
@@ -147,7 +147,7 @@ function setupCanvas(barChartData){
                 enter.append('rect').attr('class','bar')
                 .attr('x',0).attr('y',d=>yScale(d.basis))
                 .attr('height',yScale.bandwidth())
-                .style('fill','1ED760')
+                .style('fill','#000000')
                 .transition(transitionDelay)
                 .delay((d,i)=>i*20)
                 .attr('width',d=>xScale_v3(d.pop))
@@ -233,9 +233,9 @@ function setupCanvas(barChartData){
             .on('click',handleClick);
     }
 
-    const svg_width = 500;
+    const svg_width = 600;
     const svg_height = 500;
-    const chart_margin = {top:100,right:40,bottom:40,left:100}; //留空間
+    const chart_margin = {top:100,right:40,bottom:40,left:190}; //留空間
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
     const chart_height = svg_height - (chart_margin.top + chart_margin.bottom);
 

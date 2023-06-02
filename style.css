@@ -123,6 +123,7 @@ h4{
 }
 
 
+/* 切換按鈕特效 */
 /* The switch - the box around the slider */
 .switch {
     position: relative;
@@ -191,4 +192,10 @@ h4{
 /*偶數元素設定不同背景樣式*/
 .tip-info:nth-of-type(even){
     background: #e0e0e0;
+}
+
+.artist-container{
+    border: 3px solid #1ED760;
+    width:250px;
+    height: 300px;
 }
