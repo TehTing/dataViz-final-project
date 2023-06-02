@@ -94,25 +94,58 @@ function classify(data, basis) {
     return dataArray;
 }
 
+
+function pieChart(data){
+    var width = 400;
+    var height = 400;
+    var radius = Math.min(width, height) / 2;
+    var this_svg = d3.select('.chart-cotainer')
+                     .attr("width", width)
+                     .attr("height", height)
+                     .append("g")
+                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    var pie = d3.pie()
+                .value(function(d){
+                    return  d.pop;
+                }).sort(null);
+    
+}
+
 // 所有跟畫面有關的
-function setupCanvas(barChartData){
+function setupCanvas(ChartData){
     let metric = "pop";
-    const thisData = chooseData(metric, barChartData);  
+    const thisData = chooseData(metric, ChartData);  
 
     function click(){
         metric = this.dataset.name;   
         console.log(metric)  
         if (metric == "dark") return;
+        
 
+        if (metric == "pie") {
+            const thisData = chooseData("pop", ChartData);  
+            pieChart(thisData);
+            return
+        }
         /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
-        const thisData = chooseData(metric, barChartData);  
+        const thisData = chooseData(metric, ChartData);  
+        
         update(thisData);
     }
 
     d3.selectAll('button').on('click',click);
 
-    
 
+    // function pieChart(data){}
+    //     var width = 400;
+    //     var height = 400;
+    //     var radius = Math.min(width, height) / 2;
+
+    //     var this_svg = d3.select('.chart-cotainer').append('svg')
+    //     .attr('width',svg_width).attr('height',svg_height)
+    //     .append('g')
+    //     .attr('transform',"translate(" + width / 2 + "," + height / 2 + ")");
+    // }
 
     function update(data){
         console.log(data);
@@ -232,6 +265,7 @@ function setupCanvas(barChartData){
             .on('mouseout',mouseout)
             .on('click',handleClick);
     }
+   
 
     const svg_width = 500;
     const svg_height = 500;
@@ -239,16 +273,16 @@ function setupCanvas(barChartData){
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
     const chart_height = svg_height - (chart_margin.top + chart_margin.bottom);
 
-    const this_svg = d3.select('.bar-chart-cotainer').append('svg')
+    var this_svg = d3.select('.chart-cotainer').append('svg')
                     .attr('width',svg_width).attr('height',svg_height)
                     .append('g')
                     .attr('transform',`translate(${chart_margin.left},${chart_margin.top})`);
     //Find min & max
-    const xExtent = d3.extent(barChartData,d=>d.pop);
+    const xExtent = d3.extent(ChartData,d=>d.pop);
     //debugger;
     const xScale_v1 = d3.scaleLinear().domain(xExtent).range([0, chart_width]);    
     //only max
-    let xMax = d3.max(barChartData, d=>d.pop);
+    let xMax = d3.max(ChartData, d=>d.pop);
     let xScale_v2 = d3.scaleLinear().domain([0,xMax]).range([0, chart_width]);
     //簡潔一點
     let xScale_v3 = d3.scaleLinear([0,xMax],[0, chart_width]);
@@ -256,7 +290,7 @@ function setupCanvas(barChartData){
 
 
     // y-axis
-    let yScale = d3.scaleBand().domain(barChartData.map(d=>d.basis).slice(0, 15))
+    let yScale = d3.scaleBand().domain(ChartData.map(d=>d.basis).slice(0, 15))
                                 .rangeRound([0,chart_height])
                                 .paddingInner(0.30);
     console.log(yScale.bandwidth());
@@ -265,7 +299,7 @@ function setupCanvas(barChartData){
     const bars = this_svg.append('g').attr('class', 'bars')
                          //.on('click',handleClick); // 添加點擊事件監聽器
                         //  .selectAll('.bar')
-                        //  .data(barChartData)
+                        //  .data(ChartData)
                         //  .enter()
                         //  .append('rect')
                         //  .attr('class', 'bar')
