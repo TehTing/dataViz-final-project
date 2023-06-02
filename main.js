@@ -249,12 +249,22 @@ function setupCanvas(ChartData){
         function mouseover(e){
             //get data
             const thisBarData = d3.select(this).data()[0];
-            const bodyData = [
-                ['Title', thisBarData.basis],
-                ['Artist', thisBarData.artist],
-                ['Top Genre', thisBarData.top_genre],
-                ['Year Release', thisBarData.year_released]
-            ];
+
+            var bodyData;
+            if (metric == "pop")
+            {
+                bodyData = [
+                    ['Title', thisBarData.basis],
+                    ['Artist', thisBarData.artist],
+                    ['Top Genre', thisBarData.top_genre],
+                    ['Year Release', thisBarData.year_released]
+                ];
+            }else{
+                bodyData = [
+                    ['Title', thisBarData.basis],
+                ];
+            }
+            
 
 
             // console.log(thisBarData);
