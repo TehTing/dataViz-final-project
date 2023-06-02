@@ -11,9 +11,24 @@ img {
     top: 15px;
     left:30px;
 }
+body{
+    font-family: 'Fjalla One', sans-serif;
+}
 h1 {
     background-color: #000000;
     color:#1ED760; 
+    font-family: 'Fjalla One', sans-serif;
+    font-size:60px;
+    display: inline;
+    border-radius: 15px;
+    position: relative;
+    top :10px;
+    left: 100px;
+}
+h2 {
+    background-color: #000000;
+    color:#1ED760; 
+    font-family: 'Fjalla One', sans-serif;
     display: inline;
     border-radius: 15px;
     position: relative;
@@ -56,12 +71,15 @@ button {
     background-color: #1ED760;
     border: none;
     font-size: 18px;
-    height:170px
+    font-family: 'Fjalla One', sans-serif;
+    height:127.5px;
+    
 }
 
 button:hover {
     background-color: #008000;
     color :white;
+    font-family: 'Fjalla One', sans-serif;
 }
 
 
@@ -198,4 +216,5 @@ h4{
     border: 3px solid #1ED760;
     width:250px;
     height: 300px;
+    margin-left: 3%;
 }
