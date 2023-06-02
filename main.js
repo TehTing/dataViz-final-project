@@ -80,7 +80,7 @@ function classify(data, basis) {
 
     // basis = 2 代表不分類，直接依單曲作人氣排行
     if (basis == 2) {
-        const dataArray = Array.from(data, d => ({ basis: d.title, pop: d.pop}));
+        const dataArray = Array.from(data, d => ({ basis: d.title, pop: d.pop,top_genre:d.top_genre,year_released:d.year_released,artist:d.artist}));
         return dataArray;
     }
 
@@ -90,7 +90,7 @@ function classify(data, basis) {
         v => d3.sum(v, leaf => leaf.pop),
         d => basis ? d.artist : d.top_genre
     )
-    const dataArray = Array.from(dataMap, d => ({ basis: d[0], pop: d[1] }));
+    const dataArray = Array.from(dataMap, d => ({ basis: d[0], pop: d[1],top_genre:d.top_genre,year_released:d.year_released,artist:d.artist }));
     return dataArray;
 }
 
@@ -250,7 +250,7 @@ function setupCanvas(ChartData){
             //get data
             const thisBarData = d3.select(this).data()[0];
             const bodyData = [
-                ['Title', thisBarData.title],
+                ['Title', thisBarData.basis],
                 ['Artist', thisBarData.artist],
                 ['Top Genre', thisBarData.top_genre],
                 ['Year Release', thisBarData.year_released]
