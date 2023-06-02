@@ -515,8 +515,9 @@ function process(music) {
     // year 和 artist_t 是用來指定發行年份和藝術家類型的，可以自行更改
     year = yearReleasedList[1];     // 這兩行可自己改
     artist_t = artistTypeList[1];   // 這兩行可自己改
-    dataClean = dataClean.filter(d => d.year_released == year && d.artist_type == artist_t)
-
+    //不確定是否有要篩選這只篩到2010 跟標題有點不符 By yi-dien所以我註解掉了
+    //dataClean = dataClean.filter(d => d.year_released == year && d.artist_type == artist_t)
+    
 
     
     const dataClassified = chooseData("pop", dataClean);
