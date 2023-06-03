@@ -35,10 +35,7 @@ h2 {
     top :10px;
     left: 120px;
 }
-/* body{
-	background-image: url("https://cdn.pixabay.com/photo/2017/07/10/18/47/background-2491008_960_720.png");
-	background-repeat: repeat;
-} */
+
 .controls{
     display:flex;
     flex-direction :column;
@@ -185,11 +182,11 @@ h4{
   }
   
   input:checked + .slider {
-    background-color: lightblue;
+    background-color: #1ED760;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px lightblue;
+    box-shadow: 0 0 1px #1ED760;
   }
   
   input:checked + .slider:before {
@@ -212,13 +209,6 @@ h4{
     background: #e0e0e0;
 }
 
-.artist-container{
-    border: 3px solid #1ED760;
-    width:250px;
-    height: 300px;
-    margin-left: 3%;
-}
-
 
 /*音樂撥放配置*/
 .music-item {
@@ -229,4 +219,12 @@ h4{
 
 .music-item button {
     margin-left: 10px;
+}
+
+/*大小容納三部影片*/
+#youtube-container{
+    border: 3px solid #1ED760;
+    width:560px;
+    height: 955px;
+    margin-left: 3%;
 }
