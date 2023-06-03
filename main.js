@@ -118,14 +118,20 @@ function playMusic(songs){
     var height = 315;
 
     var container = d3.select("#youtube-container");
+    var iframe = d3.select("iframe");
 
-    var iframe = container.append("iframe")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("src", "https://www.youtube.com/embed/" + songs[0].videoId)
-      .attr("frameborder", 0)
-      .attr("allow", "autoplay; encrypted-media")
-      .attr("allowfullscreen", true);
+    // 若不存在iframe，在畫面中建立iframe
+    if(iframe.empty()){
+        var iframe = container.append("iframe")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("frameborder", 0)
+        .attr("allow", "autoplay; encrypted-media")
+        .attr("allowfullscreen", true);
+    };
+
+    // 設定iframe影片連結
+    iframe.attr("src", "https://www.youtube.com/embed/" + songs[0].videoId);
 
     container.attr("class", "youtube-container");
     iframe.attr("class", "youtube-iframe");
@@ -418,7 +424,7 @@ function setupCanvas(ChartData){
 
 function searchMusic(songName){
     // 設定 YouTube Data API 金鑰
-    var apiKey = "AIzaSyDhw7cLJFeD80KwhtvodNgcK93j1uLJcn8";
+    var apiKey = "AIzaSyBd2Epi8FoNIQwxkbyPgEIkQdFuGKgwlh0";
     
     
     function searchSong(songName) {
