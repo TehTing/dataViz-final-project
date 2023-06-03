@@ -114,41 +114,21 @@ function pieChart(data){
 
 /*無法顯示，待修理*/ 
 function playMusic(songs){
-    // var container = d3.select("#player");
-    // var player;
+    var width = 560;
+    var height = 315;
 
-    // function onYouTubeIframeAPIReady() {
-    //   player = new YT.Player("player", {
-    //     height: "360",
-    //     width: "640",
-    //     videoId: songs[0].videoId, // 默认播放第一首歌曲
-    //     events: {
-    //       onReady: onPlayerReady
-    //     }
-    //   });
-    // }
+    var container = d3.select("#youtube-container");
 
-    // function onPlayerReady(event) {
-    //   // 可以在此处添加其他代码或事件处理程序
-    //   // 在播放器准备好后，可以创建一个音乐列表，点击列表中的音乐将播放相应的视频
-    //   var musicList = d3.select("body").append("ul");
+    var iframe = container.append("iframe")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("src", "https://www.youtube.com/embed/" + songs[0].videoId)
+      .attr("frameborder", 0)
+      .attr("allow", "autoplay; encrypted-media")
+      .attr("allowfullscreen", true);
 
-    //   musicList
-    //     .selectAll("li")
-    //     .data(songs)
-    //     .enter()
-    //     .append("li")
-    //     .text(function(d) { return d.name + " - " + d.artist; })
-    //     .on("click", function(d) {
-    //       player.loadVideoById(d.videoId);
-    //     });
-
-    //   musicList
-    //     .selectAll("li")
-    //     .append("img")
-    //     .attr("src", function(d) { return d.pictureUrl; })
-    //     .attr("class", "thumbnail");
-    // }
+    container.attr("class", "youtube-container");
+    iframe.attr("class", "youtube-iframe");
 }
 
 
@@ -438,7 +418,7 @@ function setupCanvas(ChartData){
 
 function searchMusic(songName){
     // 設定 YouTube Data API 金鑰
-    var apiKey = "AIzaSyBLzgWDtCNgwxtUC2XjXMPmUK9ld08vIcw";
+    var apiKey = "AIzaSyDhw7cLJFeD80KwhtvodNgcK93j1uLJcn8";
     
     
     function searchSong(songName) {
