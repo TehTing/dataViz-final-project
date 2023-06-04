@@ -317,7 +317,7 @@ function setupCanvas(ChartData){
 
     const svg_width = 600;
     const svg_height = 500;
-    const chart_margin = {top:100,right:40,bottom:40,left:200}; //留空間
+    const chart_margin = {top:100,right:40,bottom:40,left:190}; //留空間
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
     const chart_height = svg_height - (chart_margin.top + chart_margin.bottom);
 
@@ -432,100 +432,68 @@ function setupCanvas(ChartData){
 
 
 
-// function searchMusic(songName){
-//     // 設定 YouTube Data API 金鑰
-//     var apiKey = "AIzaSyDhw7cLJFeD80KwhtvodNgcK93j1uLJcn8";
-    
-    
-//     function searchSong(songName) {
-//         // 使用d3.json發起API請求
-//         d3.json(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(songName)}&type=video&key=${apiKey}`)
-//           .then(function(response) {
-//             // 從返回的數據中提取連結 ID
-//             const videoId = response.items[0].id.videoId;
-
-//             // 取得歌曲名，歌手名
-//             const songTitle = response.items[0].snippet.title;
-//             const artistName = response.items[0].snippet.channelTitle;
-
-//             // 取得預覽圖片
-//             const thumbnailUrl = response.items[0].snippet.thumbnails.default.url;
-            
-//             // 取得 YouTube 影片連結
-//             const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
-
-            
-//             // 打印链接或执行其他操作
-//             console.log('Song:', songTitle);
-//             console.log('Artist:', artistName);
-//             console.log('Video Link:', videoLink);
-//             // console.log('Thumbnail URL:', thumbnailUrl);
-
-//             // 轉換為mp3格式
-//             var songs = [
-//                 { name: songTitle, artist: artistName, url:videoLink , pictureUrl: thumbnailUrl, videoId: videoId}
-//             ];
-//             playMusic(songs);
-//           }) 
-//           .catch(function(error) {
-//             console.error('Error:', error);
-//           });
-//     }
-   
-//     // 搜索歌曲並獲取連結
-//     searchSong(songName);
-// }
-
 function searchMusic(songName){
     // 設定 YouTube Data API 金鑰
-    var apiKey = "AIzaSyDhw7cLJFeD80KwhtvodNgcK93j1uLJcn8"; 
-function searchSong(songName) {
-    function searchSong(songName) {
-        d3.json(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(songName)}&type=video&key=${apiKey}`)
-            .then(function(response) {
-                const videoId = response.items[0].id.videoId;
-                const songTitle = response.items[0].snippet.title;
-                const artistName = response.items[0].snippet.channelTitle;
-                const thumbnailUrl = response.items[0].snippet.thumbnails.default.url;
+    var apiKey = "AIzaSyBhqRnWWANwrkQYGTTIEnCZAkPS0PDVfrw";
+    
+    
+    function searchSong(songName, numResults) {
+        const encodedSongName = encodeURIComponent(songName);
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=${numResults}&q=${encodedSongName}&type=video&key=${apiKey}`;
+
+        // 使用d3.json發起API請求
+        d3.json(url)
+          .then(function(response) {
+
+            //建立傳送陣列來存放取得資訊
+            var songs = [];
+
+            // 確保只取得指定數量的結果
+            const items = response.items;
+            
+            // 使用Set來儲存不重複的影片ID
+            const uniqueVideos = new Set();
+
+            for (let i = 0; i < items.length; i ++)
+            {
+                const item = items[i];
+                // 取得ID、歌曲名，歌手名、預覽圖片、影片連結
+                const videoId = item.id.videoId;
+                const songTitle = item.snippet.title;
+                const artistName = item.snippet.channelTitle;
+                const thumbnailUrl = item.snippet.thumbnails.default.url;
                 const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
-    
-                d3.json(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`)
-                    .then(function(videoResponse) {
-                        const viewCount = videoResponse.items[0].statistics.viewCount;
-                        const likeCount = videoResponse.items[0].statistics.likeCount;
-                        const commentCount = videoResponse.items[0].statistics.commentCount;
-    
-                        console.log('Song:', songTitle);
-                        console.log('Artist:', artistName);
-                        console.log('Video Link:', videoLink);
-                        console.log('Thumbnail URL:', thumbnailUrl);
-                        console.log('View Count:', viewCount);
-                        console.log('Like Count:', likeCount);
-                        console.log('Comment Count:', commentCount);
-    
-                        // 將資訊顯示在 HTML 元素上
-                        document.getElementById('songTitle').textContent = songTitle;
-                        document.getElementById('artistName').textContent = artistName;
-                        document.getElementById('videoLink').href = videoLink;
-                        document.getElementById('thumbnail').src = thumbnailUrl;
-                        document.getElementById('viewCount').textContent = '觀看人數：' + viewCount;
-                        document.getElementById('likeCount').textContent = '喜歡數：' + likeCount;
-                        document.getElementById('commentCount').textContent = '留言數：' + commentCount;
-    
-                        var songs = [
-                            { name: songTitle, artist: artistName, url: videoLink, pictureUrl: thumbnailUrl, videoId: videoId }
-                        ];
-                        playMusic(songs);
-                    })
-                    .catch(function(error) {
-                        console.error('Error:', error);
+
+                // 檢查影片ID是否已存在，若不存在則將影片資訊加入songs陣列
+                if (!uniqueVideos.has(videoId)) {
+                    uniqueVideos.add(videoId);
+                    songs.push({
+                    name: songTitle,
+                    artist: artistName,
+                    url: videoLink,
+                    pictureUrl: thumbnailUrl,
+                    videoId: videoId,
                     });
+                } 
+
+                 // 若已搜尋到足夠數量的不同連結，則停止搜尋
+                if (songs.length >= numResults) {
+                    break;
+                }
+            }
+            console.log('song list:\n', songs);
+            // playMusic(songs);
             })
-        }
+          .catch(function(error) {
+            console.error('Error:', error);
+          });
     }
-// 搜索歌曲並獲取連結
-searchSong(songName);
+   
+    // 搜索歌曲並獲取連結(暫時設定為5個)
+    searchSong(songName, 5);
 }
+
+
 
 //Main//readyFunction
 // 產業分類功能(之後試能不能跑...)
