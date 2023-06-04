@@ -495,15 +495,8 @@ function searchMusic(songName) {
               for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const videoId = item.id;
-                const likes = parseInt(item.statistics.likeCount);
+                const likes = parseInt(item.statistics.likeCount);                  //其他可繼續延伸的功能
                 const subscribers = parseInt(item.statistics.subscriberCount);
-  
-                // 在songs陣列中找到相應的歌曲物件並更新按讚數和訂閱人數
-                const song = songs.find((song) => song.videoId === videoId);
-                if (song) {
-                  song.likes = likes;
-                  song.subscribers = subscribers;
-                }
               }
   
               console.log('song list:\n', songs);
@@ -521,120 +514,6 @@ function searchMusic(songName) {
     // 搜索歌曲並獲取連結(暫時設定為5個)
     searchSong(songName, 5);
   }
-
-  function displaySongs(songs) {
-  var songList = document.getElementById('songList');
-
-  // 清空歌曲列表
-  songList.innerHTML = '';
-
-  // 逐個歌曲生成元素並加入列表
-  for (var i = 0; i < songs.length; i++) {
-    var song = songs[i];
-
-    // 建立歌曲元素
-    var songElement = document.createElement('div');
-    songElement.classList.add('song-item');
-
-    var thumbnailImg = document.createElement('img');
-    thumbnailImg.src = song.pictureUrl;
-    songElement.appendChild(thumbnailImg);
-
-    var songInfo = document.createElement('div');
-    var songTitle = document.createElement('h3');
-    songTitle.textContent = song.name;
-    songInfo.appendChild(songTitle);
-
-    var artistName = document.createElement('p');
-    artistName.textContent = 'Artist: ' + song.artist;
-    songInfo.appendChild(artistName);
-
-    var likesCount = document.createElement('p');
-    likesCount.textContent = 'Likes: ' + song.likes;
-    songInfo.appendChild(likesCount);
-
-    var subscribersCount = document.createElement('p');
-    subscribersCount.textContent = 'Subscribers: ' + song.subscribers;
-    songInfo.appendChild(subscribersCount);
-
-    var videoLink = document.createElement('a');
-    videoLink.href = song.url;
-    videoLink.textContent = 'Watch Video';
-    songInfo.appendChild(videoLink);
-
-    songElement.appendChild(songInfo);
-
-    // 將歌曲元素加入歌曲列表
-    songList.appendChild(songElement);
-  }
-}
-
-//  假設您已獲取歌曲資訊並存儲在一個名為'songs'的陣列中
-var songs = [
-  {
-    name: 'Song',
-    artist: 'Artist',
-    url: '',
-    pictureUrl: '',
-    videoId: '',
-    likes: '',
-    subscribers: '',
-  }
-];
-
-// 顯示歌曲列表在網頁上
-displaySongs(songs);
-
-
-function displaySongs(songs) {
-    var songList = document.getElementById('songList');
-  
-    // 清空歌曲列表
-    songList.innerHTML = '';
-  
-    // 逐個歌曲生成元素並加入列表
-    for (var i = 0; i < songs.length; i++) {
-      var song = songs[i];
-  
-      // 建立歌曲元素
-      var songElement = document.createElement('div');
-      songElement.classList.add('song-item');
-  
-      var thumbnailImg = document.createElement('img');
-      thumbnailImg.src = song.pictureUrl;
-      songElement.appendChild(thumbnailImg);
-  
-      var songInfo = document.createElement('div');
-      var songTitle = document.createElement('h3');
-      songTitle.textContent = song.name;
-      songInfo.appendChild(songTitle);
-  
-      var artistName = document.createElement('p');
-      artistName.textContent = 'Artist: ' + song.artist;
-      songInfo.appendChild(artistName);
-  
-      var likesCount = document.createElement('p');
-      likesCount.textContent = 'Likes: ' + song.likes;
-      songInfo.appendChild(likesCount);
-  
-      var subscribersCount = document.createElement('p');
-      subscribersCount.textContent = 'Subscribers: ' + song.subscribers;
-      songInfo.appendChild(subscribersCount);
-  
-      var videoLink = document.createElement('a');
-      videoLink.href = song.url;
-      videoLink.textContent = 'Watch Video';
-      songInfo.appendChild(videoLink);
-  
-      songElement.appendChild(songInfo);
-  
-      // 將歌曲元素加入歌曲列表
-      songList.appendChild(songElement);
-    }
-  }
-  // 顯示歌曲列表在網頁上
-  displaySongs(songs);
-  
 
 //Main//readyFunction
 // 產業分類功能(之後試能不能跑...)

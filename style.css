@@ -46,8 +46,7 @@ button {
     border: none;
     font-size: 18px;
     font-family: 'Fjalla One', sans-serif;
-    height:127.5px;
-    
+    height:125px;                           /*不要亂調這個*/
 }
 
 button:hover {
@@ -190,7 +189,7 @@ h4{
 /*大小容納三部影片*/
 #youtube-container{
     border: 5px solid #1ED760;
-    width:560px;
+    width:570px;
     height: 500px;
     margin-left: 3%;
 }
