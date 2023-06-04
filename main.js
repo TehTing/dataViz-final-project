@@ -507,7 +507,7 @@ function searchMusic(songName) {
               }
   
               console.log('song list:\n', songs);
-            //   playMusic(songs);
+              playMusic(songs);
             })
             .catch(function (error) {
               console.error('Error:', error);
@@ -643,20 +643,6 @@ function process(music) {
 
     // var button = document.querySelector('.prompttest');
     // var showtxt = document.querySelector('.show');
-
-    // function popup(e) {
-    //     var typecategory = window.prompt('請輸入欲查詢音樂類別');
-    //     if (typeCategory == null || "") {
-    //         showtxt.innerHTML = '您已取消輸入'
-    //         }
-    //         else{
-    //             categories = typeCategory;
-    //             showtxt.innerHTML = "目前查詢的音樂類別為: " + typeCategory;
-    //         }
-    //         const dataClean = filterData(d);
-    //         setupCanvas(dataClassified);
-    //     }
-    //     button.addEventListener('click',popup); //產業分類功能
     
     // filter()初步除去有空值、以及在2000年前發行的歌
     let dataClean = filterData(music);

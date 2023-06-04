@@ -3,13 +3,13 @@
     color: #1ED760;
     
 }
-img {
+.titlepic {
     height: 80px;
     width: 80px;
     border-radius: 15px;
     position: relative;
-    top: 15px;
-    left:30px;
+    top: 10%;       /*不知為何下不來*/
+    left: 20%;
 }
 body{
     font-family: 'Fjalla One', sans-serif;
@@ -22,8 +22,8 @@ h1 {
     display: inline;
     border-radius: 15px;
     position: relative;
-    top :10px;
-    left: 100px;
+    top :10%;
+    left: 25%; 
 }
 h2 {
     background-color: #000000;
@@ -33,7 +33,7 @@ h2 {
     border-radius: 15px;
     position: relative;
     top :10px;
-    left: 120px;
+    left: 26%;
 }
 
 .controls{
@@ -111,8 +111,8 @@ h4{
     display: inline-block;
     width: 60px;
     height: 34px;
-    top: 3px;
-    left: 200px;
+    top: 10%;
+    left: 32%;
   }
   
   /* Hide default HTML checkbox */
@@ -189,9 +189,9 @@ h4{
 
 /*大小容納三部影片*/
 #youtube-container{
-    border: 3px solid #1ED760;
+    border: 5px solid #1ED760;
     width:560px;
-    height: 955px;
+    height: 500px;
     margin-left: 3%;
 }
 
@@ -202,7 +202,7 @@ h4{
     padding: 0;
     }
   
-      /* 假設你想要一個固定寬度的容器，並且希望其在不同螢幕上居中顯示 */
+/* 假設你想要一個固定寬度的容器，並且希望其在不同螢幕上居中顯示 */
 .setup {
     max-width: 1500px; /* 設定最大寬度 */
     margin: 0 auto; /* 水平置中 */
@@ -215,15 +215,37 @@ h4{
 }
   
 /* 在不同螢幕寬度下調整內容的大小或佈局 */
-@media screen and (max-width: 768px) and (min-width: 481px){
-    .setup {
+
+@media screen and (min-width: 1500px){
+    .screensize {
+        max-width: 100%; /* 縮小容器的寬度 */
+    }
+}
+@media screen and (min-width: 992px) and (max-width: 1199.99px){
+    .screensize {
         max-width: 90%; /* 縮小容器的寬度 */
     }
 }
-  
+@media screen and (min-width: 768px) and (max-width: 991.99px){
+    .screensize {
+        max-width: 80%; /* 縮小容器的寬度 */
+    }
+}
+
+@media screen and (min-width: 480px) and (max-width: 767.99px){
+    .screensize {
+        max-width: 70%; /* 縮小容器的寬度 */
+    }
+}
 /* 在更小的螢幕寬度下進一步調整內容的大小或佈局 */
-@media screen and (max-width: 480px) {
-    .setup {
+@media screen and (max-width: 479.99px) {
+    .screensize {
         padding: 10px; /* 縮小內距 */
     }
+}
+.screensize{
+    position: relative;
+    top: 30%;  
+    left: 2%;
+    /* transform: translate(-50%, -50%); */
 }
