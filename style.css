@@ -78,18 +78,7 @@ button:hover {
     color :white;
     font-family: 'Fjalla One', sans-serif;
 }
-
-
-/* 使用flex排版 */
-.setup {
-    /* border : solid 5px #FFAC12; */
-    height : 950px;
-    margin:2%;
-    display:flex;
-    flex-wrap: wrap;
-    
-}
-
+ 
 svg{
     border :5px solid #1ED760;
 }
@@ -227,4 +216,37 @@ h4{
     width:560px;
     height: 955px;
     margin-left: 3%;
+}
+
+/* 全域樣式 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    }
+  
+      /* 假設你想要一個固定寬度的容器，並且希望其在不同螢幕上居中顯示 */
+.setup {
+    max-width: 1500px; /* 設定最大寬度 */
+    margin: 0 auto; /* 水平置中 */
+    padding: 20px; /* 加入一些內距 */
+    /* background-color: #f2f2f2; */
+    height : 950px;
+    margin:2%;
+    display:flex;
+    flex-wrap: wrap;
+}
+  
+/* 在不同螢幕寬度下調整內容的大小或佈局 */
+@media screen and (max-width: 768px) {
+    .setup {
+        max-width: 90%; /* 縮小容器的寬度 */
+    }
+}
+  
+/* 在更小的螢幕寬度下進一步調整內容的大小或佈局 */
+@media screen and (max-width: 480px) {
+    .setup {
+        padding: 10px; /* 縮小內距 */
+    }
 }
