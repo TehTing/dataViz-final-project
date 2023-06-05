@@ -48,7 +48,9 @@ function filterData(d) {
     return result;
 }
 
-
+// function cutText(string){
+//     return string.lenght<35 ? string : string.substring(0,35)+"...";
+// }
 
 function listMaker(dataClean) {
     // 為了建立 artist_type 和 year_released 列表而生
@@ -80,7 +82,7 @@ function classify(data, basis) {
 
     // basis = 2 代表不分類，直接依單曲作人氣排行
     if (basis == 2) {
-        const dataArray = Array.from(data, d => ({ basis: d.title, pop: d.pop,top_genre:d.top_genre,year_released:d.year_released,artist:d.artist}));
+        const dataArray = Array.from(data, d => ({ basis:d.title, pop:d.pop, top_genre:d.top_genre, year_released:d.year_released, artist:d.artist}));
         return dataArray;
     }
 
@@ -94,22 +96,6 @@ function classify(data, basis) {
     return dataArray;
 }
 
-
-function pieChart(data){
-    var width = 400;
-    var height = 400;
-    var radius = Math.min(width, height) / 2;
-    var this_svg = d3.select('.chart-cotainer')
-                     .attr("width", width)
-                     .attr("height", height)
-                     .append("g")
-                     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-    var pie = d3.pie()
-                .value(function(d){
-                    return  d.pop;
-                }).sort(null);
-    
-}
 
 
 /*無法顯示，待修理*/ 
@@ -152,368 +138,484 @@ function playMusic(songs){
 // 所有跟畫面有關的
 function setupCanvas(ChartData){
     let metric = "pop";
+    let preMetric = "";
     const thisData = chooseData(metric, ChartData);  
 
     function click(){
-        metric = this.dataset.name;   
-        console.log(metric)  
+        preMetric = metric;
+        metric = this.dataset.name;    
         if (metric == "dark") return;
-        
-
-        if (metric == "pie") {
-            const thisData = chooseData("pop", ChartData);  
-            pieChart(thisData);
-            return
-        }
+  
         /*隨著使用者按按鈕換分頁 再呼叫一次chooseData*/
-        const thisData = chooseData(metric, ChartData);  
+        const thisData = chooseData(metric, ChartData); 
         
+        if (metric == "switch") {
+            if (metric == "switch") metric = "artist";
+
+            switchChart(thisData);
+            return;
+        }
+       
+        
+        // 如果是pie chart 直接返回
+        var chartType = d3.select("#chart").attr("data-chart-type");
+        if (chartType == "pie") 
+        {
+            createPieChart(thisData);
+            return;
+        }
         update(thisData);
     }
 
     d3.selectAll('button').on('click',click);
+    if (metric == "switch") return; 
 
-
-    // function pieChart(data){}
-    //     var width = 400;
-    //     var height = 400;
-    //     var radius = Math.min(width, height) / 2;
-
-    //     var this_svg = d3.select('.chart-cotainer').append('svg')
-    //     .attr('width',svg_width).attr('height',svg_height)
-    //     .append('g')
-    //     .attr('transform',"translate(" + width / 2 + "," + height / 2 + ")");
-    // }
-
-    function update(data){
-        console.log(data);
-        //Update Scale
-        xMax = d3.max(data, d=>d.pop);
-        console.log(xMax);
-        
-        xScale_v3 = d3.scaleLinear([0,xMax],[0,chart_width]);
-
-        // 前15筆資料
-        yScale = d3.scaleBand().domain(data.map(d=>d.basis).slice(0, 15))
-                                .rangeRound([0,chart_height])
-                                .paddingInner(0.25).paddingOuter(0);
-          
-        //Transition settings
-        const defaultDelay = 1000;
-        const transitionDelay = d3.transition().duration(defaultDelay);
-
-        //Update axis
-        xAxisDraw.transition(transitionDelay).call(xAxis.scale(xScale_v3));
-        yAxisDraw.transition(transitionDelay).call(yAxis.scale(yScale));
-
-        //Update header
-        header.select('tspan').text(`Top 15 ${metric} music in Spotify`)
-            .style('fill','#1ED760')
-       
-        //Update Bar
-        bars.selectAll('.bar')
-        .data(data.slice(0, 15), d => d.basis)
-        .join(
-            enter=>{
-                enter.append('rect').attr('class','bar')
-                .attr('x',0).attr('y',d=>yScale(d.basis))
-                .attr('height',yScale.bandwidth())
-                .style('fill','#000000')
-                .transition(transitionDelay)
-                .delay((d,i)=>i*20)
-                .attr('width',d=>xScale_v3(d.pop))
-                .style('fill','#1ED760')
-            },
-            update =>{
-                update.transition(transitionDelay)
-                      .delay((d,i)=> i*20)
-                      .attr('y',d=> yScale(d.basis))
-                      .attr('width',d=>xScale_v3(d.pop))
-            },
-            exit => {
-                exit.transition().duration(defaultDelay/2)
-                    .style('fill-opacity',0)
-                    .remove()
-            },
-        )
-
-        
-
-        //interactive 互動處理
-        const tip = d3.select('.tooltip');
-
-        function mouseover(e){
-            //get data
-            const thisBarData = d3.select(this).data()[0];
-
-            var bodyData;
-            if (metric == "pop")
-            {
-                bodyData = [
-                    ['Title', thisBarData.basis],
-                    ['Artist', thisBarData.artist],
-                    ['Top Genre', thisBarData.top_genre],
-                    ['Year Release', thisBarData.year_released]
-                ];
-            }else{
-                bodyData = [
-                    ['Title', thisBarData.basis],
-                ];
-            }
-            
-
-
-            // console.log(thisBarData);
-
-            tip.style('left',(e.clientX+15)+'px')
-               .style('top',e.clientY+'px')
-               .transition()
-               .style('opacity',0.98)
- 
-            //    d.title &&
-            //     d.artist &&
-            //     d.top_genre &&
-            //     d.pop > 0 &&
-            //     d.year_released > 2000 
-            // console.log(thisBarData);
-            tip.select('h3').html(`${thisBarData.basis}: <br>${thisBarData.pop} view(s)`);
-
-
-            d3.select('.tip-body').selectAll('p').data(bodyData)
-                .join('p').attr('class', 'tip-info')
-                .html(d=>`${d[0]}:${d[1]}`);
-        }
-
-        function mousemove(e){
-            tip.style('left',(e.clientX+15)+'px')
-               .style('top',e.clientY+'px')
-        }
-
-        function mouseout(e){
-            tip.transition()
-               .style('opacity',0)
-        }
-
-        // 點擊事件處理程序
-        function handleClick(d, i) {
-            const thisBarData = d3.select(this).data()[0];   
-            var pop = d.pop;
-            // console.log("點擊的柱形資訊：", thisBarData.basis);
-            // console.log("柱形的數值：", thisBarData.pop);
-            
-
-            // 搜尋歌曲
-            var songName = thisBarData.basis;
-            searchMusic(songName);
-        }
-        //interactive 新增監聽
-        d3.selectAll('.bar')
-            .on('mouseover',mouseover)
-            .on('mousemove',mousemove)
-            .on('mouseout',mouseout)
-            .on('click',handleClick);
-    }
-   
-
-    const svg_width = 600;
+    // 建立canvas
+    const svg_width = 1000;
     const svg_height = 500;
-    const chart_margin = {top:100,right:40,bottom:40,left:190}; //留空間
+    const chart_margin = {top:120,right:80,bottom:40,left:230}; //留空間
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
     const chart_height = svg_height - (chart_margin.top + chart_margin.bottom);
 
-    var this_svg = d3.select('.chart-cotainer').append('svg')
+    var this_svg;
+    
+    // 初始顯示bar chart，隱藏pie chart
+    // createBarChart(thisData);
+
+
+    // 切換事件
+    function switchChart(thisData){
+        var chartType = d3.select("#chart").attr("data-chart-type");
+
+        // 清除前一個圖形
+        d3.select("#chart").selectAll("*").remove();
+
+        // 切換圖形
+        if (chartType === "pie") {
+            d3.select("#chart").attr("data-chart-type", "bar");
+            // createBarChart(thisData);   
+            setupCanvas(ChartData);
+            console.log("do bar");
+            return
+            
+        } else {
+            d3.select("#chart").attr("data-chart-type", "pie");
+            createPieChart(thisData);
+            console.log("do pie");
+            return
+        }
+    }
+    
+
+    // 創建Bar Chart
+        this_svg = d3.select('.chart-cotainer').append('svg')
                     .attr('width',svg_width).attr('height',svg_height)
                     .append('g')
-                    .attr('transform',`translate(${chart_margin.left},${chart_margin.top})`);
-    //Find min & max
-    const xExtent = d3.extent(ChartData,d=>d.pop);
-    //debugger;
-    const xScale_v1 = d3.scaleLinear().domain(xExtent).range([0, chart_width]);    
-    //only max
-    let xMax = d3.max(ChartData, d=>d.pop);
-    let xScale_v2 = d3.scaleLinear().domain([0,xMax]).range([0, chart_width]);
-    //簡潔一點
-    let xScale_v3 = d3.scaleLinear([0,xMax],[0, chart_width]);
-    
+                    .attr('transform',`translate(${chart_margin.left},${chart_margin.top})`)
+                    .attr("data-chart-type", "bar");
 
-
-    // y-axis
-    let yScale = d3.scaleBand().domain(ChartData.map(d=>d.basis).slice(0, 15))
-                                .rangeRound([0,chart_height])
-                                .paddingInner(0.30);
-    console.log(yScale.bandwidth());
-
-    
-    const bars = this_svg.append('g').attr('class', 'bars')
-                         //.on('click',handleClick); // 添加點擊事件監聽器
-                        //  .selectAll('.bar')
-                        //  .data(ChartData)
-                        //  .enter()
-                        //  .append('rect')
-                        //  .attr('class', 'bar')
-                        //  .attr('x', 0)
-                        //  .attr('y', d=>yScale(d.basis))
-                        //  .attr('width',d=>xScale_v3(d.pop))
-                        //  .attr('height', yScale.bandwidth())
-                        //  .style('fill', 'red')
-                         
-    let header = this_svg.append('g').attr('class','bar-header')
-                            .attr('transform',`translate(0,${-chart_margin.top/2})`)
-                            .append('text');
-
-    header.append('tspan').text('Top 10 XXX songs')
-        .style('fill','#1ED760')
-    header.append('tspan').text('Years:Since 2000')
-        .attr('x',0)
-        .attr('y',20).style('font-size','0.8em').style('fill','#1ED760');
-
-    let xAxis = d3.axisTop(xScale_v3).ticks(5)    
-                    .tickFormat(formatTicks)
-                    .tickSizeInner(-chart_height)
-                    .tickSizeOuter(0);
-    // const xAxisDraw = this_svg.append('g')
-    //                 .attr('class','x axis')
-    //                 .call(xAxis);
-    const xAxisDraw = this_svg.append('g').attr('class','x axis');
-
-    let yAxis = d3.axisLeft(yScale).tickSize(0);
-    // const yAxisDraw = this_svg.append('g')
-    //                 .attr('class','y axis')
-    //                 .call(yAxis);
-    let yAxisDraw = this_svg.append('g').attr('class','y axis');
-    yAxisDraw.selectAll('text').attr('dx','-0.6em');
-    update(thisData);
-
-    // const tip = d3.select('.tooltip');
-
-    // function mouseover(e){ //tip的位置
-
-    //     //get data
-    //     const thisBarData = d3.select(this).data()[0];
-    //     //debugger;
-
-
-    //     // bodyData(之後想...)
-    //     // const bodyData = [
-    //     //     ['Budget',formatTicks(thisBarData.budget)],
-    //     //     ['Revenue',formatTicks(thisBarData.revenue)],
-    //     //     ['Profit',formatTicks(thisBarData.revenue - thisBarData.budget)],
-    //     //     ['TMDB Popularity',Math.round(thisBarData.popularity)],
-    //     //     ['IMDB Rating', thisBarData.vote_average],
-    //     //     ['Genres',thisBarData.genres.join(', ')],
-    //     // ];
-
-
-
-    //     tip.style('left',e.clientX+'px')    //e.clientX、Y是跟著滑鼠的位置
-    //        .style('top',e.clientY+'px')
-    //        .transition()
-    //        .style('opacity',0.98)
+        function update(data){
+            //Update Scale
+            xMax = d3.max(data, d=>d.pop);
+            console.log(xMax);
             
-    //        tip.select('h3').html(`${thisBarData.top_genre}, ${thisBarData.release_year}`);
-    //        tip.select('h4').html(`${thisBarData.tagline}, ${thisBarData.runtime} min.`);
-    //         d3.select('.tip-body').selectAll('p').data(bodyData)
-    //         .join('p').attr('class','tip-info')
-    //         .html(d=>`${d[0]} :${d[1]}`);
-    // }
-
-    // function mousemove(e){                      //較平順
-    //     tip.style('left',(e.clientX+15)+'px')
-    //        .style('top',e.clientY+'px')
-    // }
-
-    // function mouseout(e){
-    //     tip.transition()
-    //         .style('opacity',0);
-    // }
-
+            xScale_v3 = d3.scaleLinear([0,xMax],[0,chart_width]);
     
+            // 前15筆資料
+            yScale = d3.scaleBand().domain(data.map(d=>d.basis).slice(0, 15))
+                                    .rangeRound([0,chart_height])
+                                    .paddingInner(0.25).paddingOuter(0);
+              
+            //Transition settings
+            const defaultDelay = 1000;
+            const transitionDelay = d3.transition().duration(defaultDelay);
+    
+            //Update axis
+            xAxisDraw.transition(transitionDelay).call(xAxis.scale(xScale_v3));
+            yAxisDraw.transition(transitionDelay).call(yAxis.scale(yScale));
+    
+            //Update header
+            header.select('tspan').text(`Top 15 ${metric} music in Spotify`)
+                .style('fill','#1ED760')
+           
+            //Update Bar
+            bars.selectAll('.bar')
+            .data(data.slice(0, 15), d => d.basis)
+            .join(
+                enter=>{
+                    enter.append('rect').attr('class','bar')
+                    .attr('x',0).attr('y',d=>yScale(d.basis))
+                    .attr('height',yScale.bandwidth())
+                    .style('fill','#000000')
+                    .transition(transitionDelay)
+                    .delay((d,i)=>i*20)
+                    .attr('width',d=>xScale_v3(d.pop))
+                    .style('fill','#1ED760')
+                },
+                update =>{
+                    update.transition(transitionDelay)
+                          .delay((d,i)=> i*20)
+                          .attr('y',d=> yScale(d.basis))
+                          .attr('width',d=>xScale_v3(d.pop))
+                },
+                exit => {
+                    exit.transition().duration(defaultDelay/2)
+                        .style('fill-opacity',0)
+                        .remove()
+                },
+            )
+    
+            
+    
+            //interactive 互動處理
+            const tip = d3.select('.tooltip');
+    
+            function mouseover(e){
+                //get data
+                const thisBarData = d3.select(this).data()[0];
+    
+                var bodyData;
+                if (metric == "pop")
+                {
+                    bodyData = [
+                        ['Title', " "+thisBarData.basis],
+                        ['Artist', " "+thisBarData.artist],
+                        ['Top Genre', " "+thisBarData.top_genre],
+                        ['Year Release', " "+thisBarData.year_released]
+                    ];
+                }else{
+                    bodyData = [
+                        ['Title', thisBarData.basis],
+                    ];
+                }
+                
+    
+    
+                // console.log(thisBarData);
+    
+                tip.style('left',(e.clientX+15)+'px')
+                   .style('top',e.clientY+'px')
+                   .transition()
+                   .style('opacity',0.98)
+     
+                //    d.title &&
+                //     d.artist &&
+                //     d.top_genre &&
+                //     d.pop > 0 &&
+                //     d.year_released > 2000 
+                // console.log(thisBarData);
+                tip.select('h3').html(`${thisBarData.basis}: <br>${thisBarData.pop} view(s)`);
+    
+    
+                d3.select('.tip-body').selectAll('p').data(bodyData)
+                    .join('p').attr('class', 'tip-info')
+                    .html(d=>`${d[0]}:${d[1]}`);
+            }
+    
+            function mousemove(e){
+                tip.style('left',(e.clientX+15)+'px')
+                   .style('top',e.clientY+'px')
+            }
+    
+            function mouseout(e){
+                tip.transition()
+                   .style('opacity',0)
+            }
+    
+            // 點擊事件處理程序
+            function handleClick(d, i) {
+                const thisBarData = d3.select(this).data()[0];   
+                var pop = d.pop;
+                // console.log("點擊的柱形資訊：", thisBarData.basis);
+                // console.log("柱形的數值：", thisBarData.pop);
+                
+    
+                // 搜尋歌曲
+                var songName = thisBarData.basis;
+                searchMusic(songName);
+            }
+            //interactive 新增監聽
+            d3.selectAll('.bar')
+                .on('mouseover',mouseover)
+                .on('mousemove',mousemove)
+                .on('mouseout',mouseout)
+                .on('click',handleClick);
+        }
+       
+    
+        
+        //Find min & max
+        const xExtent = d3.extent(ChartData,d=>d.pop);
+        //debugger;
+        const xScale_v1 = d3.scaleLinear().domain(xExtent).range([0, chart_width]);    
+        //only max
+        let xMax = d3.max(ChartData, d=>d.pop);
+        let xScale_v2 = d3.scaleLinear().domain([0,xMax]).range([0, chart_width]);
+        //簡潔一點
+        let xScale_v3 = d3.scaleLinear([0,xMax],[0, chart_width]);
+        
+    
+    
+        // y-axis
+        let yScale = d3.scaleBand().domain(ChartData.map(d=>d.basis).slice(0, 15))
+                                    .rangeRound([0,chart_height])
+                                    .paddingInner(0.30);
+        console.log(yScale.bandwidth());
+    
+        
+        const bars = this_svg.append('g').attr('class', 'bars')
+                                         
+        let header = this_svg.append('g').attr('class','bar-header')
+                                .attr('transform',`translate(0,${-chart_margin.top/2})`)
+                                .append('text');
+    
+        header.append('tspan').text('Top 10 XXX songs')
+            .style('fill','#1ED760').style('font-size','1.5em')
+        header.append('tspan').text('Years: since 2000')
+            .attr('x',0)
+            .attr('y',28).style('font-size','1em').style('fill','#1ED760');
+    
+        let xAxis = d3.axisTop(xScale_v3).ticks(5)    
+                        .tickFormat(formatTicks)
+                        .tickSizeInner(-chart_height)
+                        .tickSizeOuter(0);
+        // const xAxisDraw = this_svg.append('g')
+        //                 .attr('class','x axis')
+        //                 .call(xAxis);
+        const xAxisDraw = this_svg.append('g').attr('class','x axis');
+    
+        let yAxis = d3.axisLeft(yScale).tickSize(0);
+        // const yAxisDraw = this_svg.append('g')
+        //                 .attr('class','y axis')
+        //                 .call(yAxis);
+        let yAxisDraw = this_svg.append('g').attr('class','y axis');
+        yAxisDraw.selectAll('text').attr('dx','-0.6em');
+        update(thisData); 
+
+        // 創建Pie Chart
+        function createPieChart(dataset){
+        // 清除前一個圖形
+        d3.select("#chart").selectAll("*").remove();
+        
+
+        // 更新SVG元素，並進行平移
+        this_svg = d3
+            .select(".chart-cotainer")
+            .append("svg")
+            .attr("width", svg_width)
+            .attr("height", svg_height)
+            
+        // 定義平移的位移量
+        var translateX = svg_width / 2;
+        var translateY = svg_height / 2;
+
+        // 創建pie的容器並進行平移
+        var pieContainer = this_svg.append("g")
+                                .attr("transform", "translate(" + translateX + "," + translateY + ")");
+
+
+
+        // 定義餅圖的半徑
+        var radius = Math.min(svg_width, svg_height) / 2.5;
+
+        // 用D3的餅圖生成器來生成路徑
+        var pie = d3.pie().value(function (d) {
+            return d.pop;
+        });
+
+        // 創建餅圖的弧形生成器
+        var arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+        // 將資料連結到圖形元素
+        var arcs = pieContainer
+            .selectAll("arc")
+            .data(pie(dataset))
+            .enter()
+            .append("g")
+            .attr("class", "arc");
+
+
+        // 使用ColorBrewer 的配色方案
+        var colorScale = d3.scaleOrdinal()
+        .domain(dataset.map(function(d) { return d.label; }))
+        .range(d3.schemeSet3); // 使用 ColorBrewer 的 Set3 方案
+
+        // 使用D3.js比例尺
+        // var colorScale = d3.scaleOrdinal()
+        // .domain(dataset.map(function(d) { return d.basis; }))
+        // .range(d3.schemeCategory10); // 使用 D3 內建的十種顏色
+
+        // 繪製弧形路徑
+        var arcPaths = arcs.append("path")
+                            .attr("d", arc)
+                            .attr("fill", function (d, i) {
+
+                                // 隨機生成填充顏色
+                                return colorScale(d.data.basis);
+                            })
+                            .attr("stroke", "white")
+                            .style("stroke-width", "2px");
+        
+
+        // // pie chart添加標籤
+        // var offset = 1.7;
+        // var textLabels = arcs.append("text")
+        //                     .attr("transform", function (d) {
+        //                         // 計算弧形中心點的位置
+        //                         var centroid = arc.centroid(d);
+
+        //                         // 計算文字偏移量
+        //                         var offsetX = centroid[0] * offset; // 調整偏移量的倍數
+        //                         var offsetY = centroid[1] * offset; // 調整偏移量的倍數
+        //                         return "translate(" + offsetX + "," + offsetY + ")";
+        //                     })
+        //                     .attr("text-anchor", "middle")
+        //                     .text(function (d) {
+        //                         return d.data.basis;
+        //                     });
+
+        
+
+        // 創建資訊提示框
+        var tooltip = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+        // 設置滑鼠事件處理器
+        arcPaths.on("mouseover", function (event, d) {
+            // 顯示資訊提示框
+            tooltip.style("opacity", 1).html(d.data.basis + ": " + d.data.pop);
+        })
+        .on("mousemove", function (event) {
+            // 設置資訊提示框的位置
+            tooltip
+            .style("left", event.pageX + "px")
+            .style("top", event.pageY/0.95 + "px");
+        })
+        .on("mouseout", function (d) {
+            // 隱藏資訊提示框
+            tooltip.style("opacity", 0);
+        }).on("click", function (event, d) {
+            // 滑鼠點擊 pie 觸發的事件處理邏輯
+            console.log("Pie clicked:", d);
+            // 在這裡可以添加你想要觸發的其他操作或事件處理邏輯
+
+                // 搜尋歌曲
+                var songName = d.data.basis;
+                console.log(songName);
+                searchMusic(songName);
+
+        });
+
+            
+        // 設定餅圖標題的位置和樣式
+        const header = this_svg.append("g")
+        .attr("class", "pie-chart-header")
+        .attr("transform", `translate(50, 60)`); // 移到左上角的座標
+
+
+        header.append("text")
+        .attr("text-anchor", "left-top")
+        .style("fill", "#1ED760")
+        .style("font-size", "1.5em")
+        .selectAll("tspan")
+        .data([`Top 15 ${metric} songs`])
+        .enter()
+        .append("tspan")
+        .attr("x", 0)
+        .attr("dy", (d, i) => i * 30)
+        .text(d => d)
+        .append("tspan")
+        .text("Years: since 2000")
+        .attr("x", 0)
+        .attr("y", 35)
+        .style("font-size", "0.7em");
+
+        // 添加扇形展开动画
+        arcPaths.transition()
+                .duration(800)
+                .attrTween("d", function (d) {
+                    var interpolate = d3.interpolate({ startAngle: 0, endAngle: 0 }, d);
+                    return function (t) {
+                        return arc(interpolate(t));
+                    };
+                });
+
+
+        // 添加扇形展开动画
+        arcs.selectAll("text")
+                .attr("opacity", 0)
+                .transition()
+                .delay(1000)
+                .duration(500)
+                .attr("opacity", 1);
+        }        
+    }
+
+function searchMusic(songName){
+    // 設定 YouTube Data API 金鑰
+    var apiKey = "AIzaSyC6rf7uoC_Ps9V8NBJUPfsyFJYV1iZtp2Y";
+    
+    
+    function searchSong(songName, numResults) {
+        const encodedSongName = encodeURIComponent(songName);
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=${numResults}&q=${encodedSongName}&type=video&key=${apiKey}`;
+
+        // 使用d3.json發起API請求
+        d3.json(url)
+          .then(function(response) {
+
+            //建立傳送陣列來存放取得資訊
+            var songs = [];
+
+            // 確保只取得指定數量的結果
+            const items = response.items;
+            
+            // 使用Set來儲存不重複的影片ID
+            const uniqueVideos = new Set();
+
+            for (let i = 0; i < items.length; i ++)
+            {
+                const item = items[i];
+                // 取得ID、歌曲名，歌手名、預覽圖片、影片連結
+                const videoId = item.id.videoId;
+                const songTitle = item.snippet.title;
+                const artistName = item.snippet.channelTitle;
+                const thumbnailUrl = item.snippet.thumbnails.default.url;
+                const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
+
+                // 檢查影片ID是否已存在，若不存在則將影片資訊加入songs陣列
+                if (!uniqueVideos.has(videoId)) {
+                    uniqueVideos.add(videoId);
+                    songs.push({
+                    name: songTitle,
+                    artist: artistName,
+                    url: videoLink,
+                    pictureUrl: thumbnailUrl,
+                    videoId: videoId,
+                    });
+                } 
+
+                 // 若已搜尋到足夠數量的不同連結，則停止搜尋
+                if (songs.length >= numResults) {
+                    break;
+                }
+            }
+            console.log('song list:\n', songs);
+            playMusic(songs);
+            })
+          .catch(function(error) {
+            console.error('Error:', error);
+          });
+    }
+   
+    // 搜索歌曲並獲取連結(暫時設定為5個)
+    searchSong(songName, 5);
 }
 
 
-
-function searchMusic(songName) {
-    // 設定 YouTube Data API 金鑰
-    var apiKey = "AIzaSyBhqRnWWANwrkQYGTTIEnCZAkPS0PDVfrw";
-  
-    function searchSong(songName, numResults) {
-      const encodedSongName = encodeURIComponent(songName);
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=${numResults}&q=${encodedSongName}&type=video&key=${apiKey}`;
-  
-      // 使用d3.json發起API請求
-      d3.json(url)
-        .then(function (response) {
-          //建立傳送陣列來存放取得資訊
-          var songs = [];
-  
-          // 確保只取得指定數量的結果
-          const items = response.items;
-  
-          // 使用Set來儲存不重複的影片ID
-          const uniqueVideos = new Set();
-  
-          // 迭代每個搜尋結果
-          for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            // 取得ID、歌曲名，歌手名、預覽圖片、影片連結
-            const videoId = item.id.videoId;
-            const songTitle = item.snippet.title;
-            const artistName = item.snippet.channelTitle;
-            const thumbnailUrl = item.snippet.thumbnails.default.url;
-            const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
-  
-            // 檢查影片ID是否已存在，若不存在則將影片資訊加入songs陣列
-            if (!uniqueVideos.has(videoId)) {
-              uniqueVideos.add(videoId);
-              songs.push({
-                name: songTitle,
-                artist: artistName,
-                url: videoLink,
-                pictureUrl: thumbnailUrl,
-                videoId: videoId,
-                likes: 0, // 按讚數，初始為0
-                subscribers: 0, // 訂閱人數，初始為0
-              });
-            }
-  
-            // 若已搜尋到足夠數量的不同連結，則停止搜尋
-            if (songs.length >= numResults) {
-              break;
-            }
-          }
-  
-          // 使用YouTube Data API的影片詳情（Videos）端點獲取按讚數和訂閱人數
-          const videoIds = songs.map((song) => song.videoId).join(',');
-          const videosUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${apiKey}`;
-  
-          d3.json(videosUrl)
-            .then(function (videosResponse) {
-              const items = videosResponse.items;
-  
-              // 更新歌曲的按讚數
-
-              for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                const videoId = item.id;
-                const likes = parseInt(item.statistics.likeCount);                  //其他可繼續延伸的功能
-                const subscribers = parseInt(item.statistics.subscriberCount);
-              }
-  
-              console.log('song list:\n', songs);
-              playMusic(songs);
-            })
-            .catch(function (error) {
-              console.error('Error:', error);
-            });
-        })
-        .catch(function (error) {
-          console.error('Error:', error);
-        });
-    }
-  
-    // 搜索歌曲並獲取連結(暫時設定為5個)
-    searchSong(songName, 5);
-  }
 
 //Main//readyFunction
 // 產業分類功能(之後試能不能跑...)
@@ -522,6 +624,20 @@ function process(music) {
 
     // var button = document.querySelector('.prompttest');
     // var showtxt = document.querySelector('.show');
+
+    // function popup(e) {
+    //     var typecategory = window.prompt('請輸入欲查詢音樂類別');
+    //     if (typeCategory == null || "") {
+    //         showtxt.innerHTML = '您已取消輸入'
+    //         }
+    //         else{
+    //             categories = typeCategory;
+    //             showtxt.innerHTML = "目前查詢的音樂類別為: " + typeCategory;
+    //         }
+    //         const dataClean = filterData(d);
+    //         setupCanvas(dataClassified);
+    //     }
+    //     button.addEventListener('click',popup); //產業分類功能
     
     // filter()初步除去有空值、以及在2000年前發行的歌
     let dataClean = filterData(music);
