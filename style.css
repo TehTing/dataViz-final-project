@@ -1,62 +1,138 @@
 .dark{
     background-color: #212121;
     color: #1ED760;
-    
 }
-.titlepic {
+
+/* img {
     height: 80px;
     width: 80px;
     border-radius: 15px;
     position: relative;
-    top: 10%;       /*不知為何下不來*/
-    left: 20%;
-}
+    top: 15px;
+    left:30px;
+} */
+
 body{
     font-family: 'Fjalla One', sans-serif;
 }
+
 h1 {
-    background-color: #000000;
+    /* background-color: #000000; */
     color:#1ED760; 
     font-family: 'Fjalla One', sans-serif;
-    font-size:60px;
-    display: inline;
-    border-radius: 15px;
-    position: relative;
-    top :10%;
-    left: 25%; 
-}
-h2 {
-    background-color: #000000;
-    color:#1ED760; 
-    font-family: 'Fjalla One', sans-serif;
+    font-size: 60px;
     display: inline;
     border-radius: 15px;
     position: relative;
     top :10px;
-    left: 26%;
+    display: flex;
+    justify-content: center; 
+}
+
+label.switch{
+    position: absolute;
+    top: -2px;
+    left: 1190px;
+}
+
+h2 {
+    /* background-color: #000000; */
+    color:#1ED760; 
+    font-family: 'Fjalla One', sans-serif;
+    display: inline;
+    border-radius: 15px;
+    position: relative;
+    top: -10px;
+    display: flex;
+    justify-content: center; 
 }
 
 .controls{
-    display:flex;
+    display: flex;
     flex-direction :column;
 }
+/* ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 160px;
+    background-color: lightblue;
+    text-align: center;
+    font-size: 18px;
+} */
+
+/* li a {
+    display:block;
+    color : #000;
+    padding: 49px 32px;
+    text-decoration: none;
+} */
+
+/* li a:hover {
+    background-color: cadetblue;
+    color :white;
+    transition: 0.5s;
+} */
 
 button {
-    background-color: #1ED760;
-    border: none;
+    background-color: #eff1ef00;
+    color: #aebab2;
+    border: 2px solid #cdd8d1;
+    border-right: none;
+    border-left: 2.5px solid #cdd8d1;
     font-size: 18px;
     font-family: 'Fjalla One', sans-serif;
-    height:125px;                           /*不要亂調這個*/
+    height: 170px;
+    width: 100px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+#switchButton{
+    position: absolute;
+    /* right: -30px;
+    top: 470px; */
+    right: 155px;
+    top: 450px;
+    height: 40px;
+    width: 40px;
+    border: 1px solid #cdd8d1;
+    border-radius: 20px;
+    font-size: 10px;
 }
 
 button:hover {
-    background-color: #008000;
+    background-color: #1ED760;
     color :white;
     font-family: 'Fjalla One', sans-serif;
+    border: none;
+    transition-duration: 0.5s;
 }
- 
+
+button:focus {
+    background-color: #1ED760;
+    color :white;
+    font-family: 'Fjalla One', sans-serif;
+    border: none;
+}
+
+/* 使用flex排版 */
+.setup {
+    /* border : solid 5px #FFAC12; */
+    height: 950px;
+    position: relative;
+    top: -15px;
+    margin: 2%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+}
+
 svg{
     border :5px solid #1ED760;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .axis .domain{
@@ -110,8 +186,8 @@ h4{
     display: inline-block;
     width: 60px;
     height: 34px;
-    top: 10%;
-    left: 32%;
+    top: 3px;
+    left: 200px;
   }
   
   /* Hide default HTML checkbox */
@@ -186,65 +262,32 @@ h4{
     margin-left: 10px;
 }
 
-/*大小容納三部影片*/
+/* 大小容納三部影片 */
 #youtube-container{
-    border: 5px solid #1ED760;
-    width:570px;
-    height: 500px;
-    margin-left: 3%;
-}
-
-/* 全域樣式 */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    }
-  
-/* 假設你想要一個固定寬度的容器，並且希望其在不同螢幕上居中顯示 */
-.setup {
-    max-width: 1500px; /* 設定最大寬度 */
-    margin: 0 auto; /* 水平置中 */
-    padding: 20px; /* 加入一些內距 */
-    /* background-color: #f2f2f2; */
-    height : 950px;
-    margin:2%;
-    display:flex;
-    flex-wrap: wrap;
-}
-  
-/* 在不同螢幕寬度下調整內容的大小或佈局 */
-
-@media screen and (min-width: 1500px){
-    .screensize {
-        max-width: 100%; /* 縮小容器的寬度 */
-    }
-}
-@media screen and (min-width: 992px) and (max-width: 1199.99px){
-    .screensize {
-        max-width: 90%; /* 縮小容器的寬度 */
-    }
-}
-@media screen and (min-width: 768px) and (max-width: 991.99px){
-    .screensize {
-        max-width: 80%; /* 縮小容器的寬度 */
-    }
-}
-
-@media screen and (min-width: 480px) and (max-width: 767.99px){
-    .screensize {
-        max-width: 70%; /* 縮小容器的寬度 */
-    }
-}
-/* 在更小的螢幕寬度下進一步調整內容的大小或佈局 */
-@media screen and (max-width: 479.99px) {
-    .screensize {
-        padding: 10px; /* 縮小內距 */
-    }
-}
-.screensize{
+    display: flex;
+    justify-content: center; 
     position: relative;
-    top: 30%;  
-    left: 2%;
-    /* transform: translate(-50%, -50%); */
+    top: 10px;
+    /* border: 3px solid #1ED760; */
+    height: 955px;
+    width: 650px;
+}
+
+
+#videoLink{
+    position: relative;
+    top: 15px;
+}
+
+#thumbnail{
+    position: absolute;
+    top: 45px;
+}
+
+iframe.youtube-iframe{
+    display: flex;
+    justify-content: center; 
+    position: relative;
+    position: absolute;
+    top: 80px;
 }
