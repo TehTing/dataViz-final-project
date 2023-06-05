@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <!-- <img src="./images/spotify.jpg" alt="spotify"> -->
+        <h1>&nbspData Visualization&nbsp</h1>
+        <h2>
+            &nbsp Group 1 &nbsp
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round" data-name="dark" onclick="darkmode()"></span>   
+            </label>
+        </h2>
+        
+        <div class="setup">
+            <!-- <div class="controls">   
+                <ul>
+                    <li><a href = "#pop"><button  data-name="pop">Popularity</button></a></li>
+                    <li><a href = "#genre"><button  data-name="genre">Genre</button></a></li>
+                    <li><a href = "#artist"><button  data-name="artist">Artist</button></a></li>
+                    <li><a href = "#darkmode"><button data-name="dark" onclick="darkmode()">切換暗黑模式</button></a></li>
+                </ul>
+            </div> -->
+            <div class="controls">   
+                <button id="pop" data-name="pop">Popularity</button>
+                <button id="genre" data-name="genre">Genre</button>
+                <button id="artist" data-name="artist">Artist</button>
+            </div>
+
+            <div  id="chart" class="chart-cotainer"></div>
+            <!-- <div class="controls">
+                <button data-name="pop">Pop</button>
+                <button data-name="genre">Genre</button>
+                <button data-name="artist">Artist</button>
+            </div>  -->
+
+
+
+            <div class="tooltip">
+                <div class="tip-header">
+                    <h3></h3>
+                    <h4></h4>
+                </div>
+                <div class="tip-body"></div>
+            </div>
+            <button id="switchButton" data-name="switch">Pie Chart</button>
+
+            <div id="youtube-container">
+                <h2 id="songTitle"></h2>
+                <p id="artistName"></p>
+                <a id="videoLink" href="#" target="_blank">影片連結</a>
+                <img id="thumbnail" src="" alt="縮圖">
+                <p id="viewCount"></p>
+                <p id="likeCount"></p>
+                <p id="commentCount"></p>
+            </div>
+        </div>
+
+        
+        <script src="//unpkg.com/d3"></script>
+        <script src="main.js"></script>
+        <script src="https://www.youtube.com/iframe_api"></script>
+        <script src="https://unpkg.com/d3@7.1.1/dist/d3.min.js"></script>
+         <!-- 引入 d3-scale-chromatic 擴展庫 -->
+         <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+    </body>
+</html>
