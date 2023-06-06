@@ -8,25 +8,17 @@
         <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
     </head>
     <body>
-        <!-- <img src="./images/spotify.jpg" alt="spotify"> -->
+        <div class="screensize">
         <h1>&nbspData Visualization&nbsp</h1>
         <h2>
             &nbsp Group 1 &nbsp
+        </h2>
             <label class="switch">
                 <input type="checkbox">
                 <span class="slider round" data-name="dark" onclick="darkmode()"></span>   
             </label>
-        </h2>
         
         <div class="setup">
-            <!-- <div class="controls">   
-                <ul>
-                    <li><a href = "#pop"><button  data-name="pop">Popularity</button></a></li>
-                    <li><a href = "#genre"><button  data-name="genre">Genre</button></a></li>
-                    <li><a href = "#artist"><button  data-name="artist">Artist</button></a></li>
-                    <li><a href = "#darkmode"><button data-name="dark" onclick="darkmode()">切換暗黑模式</button></a></li>
-                </ul>
-            </div> -->
             <div class="controls">   
                 <button id="pop" data-name="pop">Popularity</button>
                 <button id="genre" data-name="genre">Genre</button>
@@ -34,14 +26,7 @@
             </div>
 
             <div  id="chart" class="chart-cotainer"></div>
-            <!-- <div class="controls">
-                <button data-name="pop">Pop</button>
-                <button data-name="genre">Genre</button>
-                <button data-name="artist">Artist</button>
-            </div>  -->
-
-
-
+            
             <div class="tooltip">
                 <div class="tip-header">
                     <h3></h3>
@@ -61,7 +46,7 @@
                 <p id="commentCount"></p>
             </div>
         </div>
-
+        </div>
         
         <script src="//unpkg.com/d3"></script>
         <script src="main.js"></script>

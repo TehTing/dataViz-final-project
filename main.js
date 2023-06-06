@@ -165,7 +165,7 @@ function setupCanvas(ChartData){
             
             var chartType = d3.select("#chart").attr("data-chart-type");
             var switchButton = document.getElementById("switchButton");
-            // 根据当前名称进行切换
+            // 根據當前名稱進行切換
             console.log("new chart is " + chartType);
             if (chartType == "pie") {
                 switchButton.innerHTML = "Pie Chart";
@@ -193,7 +193,7 @@ function setupCanvas(ChartData){
     if (metric == "switch") return; 
 
     // 建立canvas
-    const svg_width = 1000;
+    const svg_width = 1100;
     const svg_height = 500;
     const chart_margin = {top:120,right:80,bottom:40,left:230}; //留空間
     const chart_width = svg_width - (chart_margin.left + chart_margin.right);
@@ -644,23 +644,6 @@ function searchMusic(songName){
 // 產業分類功能(之後試能不能跑...)
 // var categories = "其他";
 function process(music) {
-
-    // var button = document.querySelector('.prompttest');
-    // var showtxt = document.querySelector('.show');
-
-    // function popup(e) {
-    //     var typecategory = window.prompt('請輸入欲查詢音樂類別');
-    //     if (typeCategory == null || "") {
-    //         showtxt.innerHTML = '您已取消輸入'
-    //         }
-    //         else{
-    //             categories = typeCategory;
-    //             showtxt.innerHTML = "目前查詢的音樂類別為: " + typeCategory;
-    //         }
-    //         const dataClean = filterData(d);
-    //         setupCanvas(dataClassified);
-    //     }
-    //     button.addEventListener('click',popup); //產業分類功能
     
     // filter()初步除去有空值、以及在2000年前發行的歌
     let dataClean = filterData(music);
