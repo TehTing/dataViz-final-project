@@ -8,22 +8,16 @@ body{
 }
 
 h1 {
-    /* background-color: #000000; */
-    color:#1ED760; 
+    background-color: #1ED760;
+    color: white; 
     font-family: 'Fjalla One', sans-serif;
     font-size: 60px;
     display: inline;
     border-radius: 15px;
     position: relative;
-    top :10px;
+    top: 5%;
     display: flex;
-    justify-content: center; 
-}
-
-label.switch{
-    position: absolute;
-    top: -2px;
-    left: 1190px;
+    justify-content: center;
 }
 
 h2 {
@@ -33,10 +27,13 @@ h2 {
     display: inline;
     border-radius: 15px;
     position: relative;
-    top: -10px;
+    top: -5%;
     display: flex;
     justify-content: center; 
 }
+    .switch{
+        top: -3px;
+    }
 
 .controls{
     display: flex;
@@ -46,9 +43,7 @@ h2 {
 button {
     background-color: #eff1ef00;
     color: #aebab2;
-    border: 2px solid #cdd8d1;
-    border-right: none;
-    border-left: 2.5px solid #cdd8d1;
+    border: 2.5px solid #cdd8d1;
     font-size: 18px;
     font-family: 'Fjalla One', sans-serif;
     height: 170px;
@@ -57,12 +52,11 @@ button {
     border-bottom-left-radius: 15px;
 }
 
+
 #switchButton{
     position: absolute;
-    /* right: -30px;
-    top: 470px; */
-    right: 155px;
-    top: 450px;
+    right: 8%;
+    bottom: 49%;
     height: 40px;
     width: 40px;
     border: 1px solid #cdd8d1;
@@ -76,6 +70,7 @@ button:hover {
     font-family: 'Fjalla One', sans-serif;
     border: none;
     transition-duration: 0.5s;
+    cursor: pointer;
 }
 
 button:focus {
@@ -90,7 +85,7 @@ button:focus {
     /* border : solid 5px #FFAC12; */
     height: 950px;
     position: relative;
-    top: -15px;
+    top: -5%;
     margin: 2%;
     display: flex;
     flex-wrap: wrap;
@@ -233,42 +228,48 @@ h4{
     display: flex;
     justify-content: center; 
     position: relative;
-    top: 10px;
+    top: 5%;
     /* border: 3px solid #1ED760; */
-    height: 955px;
+    border-radius: 5px;
+    background: #efefefef;
+    /* height: 955px; */
+    height: 750px;
     width: 650px;
 }
-
+    h4{
+        position: absolute;
+        top: 2%;
+    }
 
 #videoLink{
     position: relative;
-    top: 15px;
+    top: 3%;
+    /* opacity: 0%; */
 }
 
-#thumbnail{
-    position: absolute;
-    top: 45px;
-}
 
 iframe.youtube-iframe{
     display: flex;
     justify-content: center; 
-    position: relative;
     position: absolute;
-    top: 80px;
+    top: 6%;
+}
+
+
+#thumbnail {
+    position: absolute; /* 設定縮圖為絕對定位，以便設定寬度和高度 */
+    /* width: 50%; /* 設定縮圖的寬度為容器的100% */
+    /* height: 50%; /* 設定縮圖的高度為容器的100% */
+    width: 560px;
+    height: 315px;
+    border: none;
+    bottom: 5%;
+    object-fit: cover; /* 使用 object-fit: cover 以保持縮圖比例並填滿容器 */
+    /* transform: translateX(-90%); 將圖片往左移動50%的寬度 */
 }
 
   
-  #thumbnail {
-    position:absolute; /* 設定縮圖為絕對定位，以便設定寬度和高度 */
-    width: 50%; /* 設定縮圖的寬度為容器的100% */
-    height: 50%; /* 設定縮圖的高度為容器的100% */
-    object-fit: cover; /* 使用 object-fit: cover 以保持縮圖比例並填滿容器 */
-    transform: translateX(-90%); /*將圖片往左移動50%的寬度*/
-  }
-
-  /* 在不同螢幕寬度下調整內容的佈局 */
-
+/* 在不同螢幕寬度下調整內容的佈局 */
 @media screen and (min-width: 1500px){
     .screensize {
         max-width: 100%; /* 縮小容器的寬度 */
@@ -298,6 +299,6 @@ iframe.youtube-iframe{
 }
 .screensize{
     position: relative;
-    top: 30%;  
-    left: 2%;
+    /* top: 30%;  
+    left: 2%; */
 }

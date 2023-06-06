@@ -9,23 +9,24 @@
     </head>
     <body>
         <div class="screensize">
-        <h1>&nbspData Visualization&nbsp</h1>
+        <h1>&nbspYoutify&nbsp</h1>
         <h2>
             &nbsp Group 1 &nbsp
-        </h2>
+            <div>&nbsp&nbsp</div>
             <label class="switch">
                 <input type="checkbox">
                 <span class="slider round" data-name="dark" onclick="darkmode()"></span>   
             </label>
-        
+        </h2>
         <div class="setup">
             <div class="controls">   
                 <button id="pop" data-name="pop">Popularity</button>
                 <button id="genre" data-name="genre">Genre</button>
                 <button id="artist" data-name="artist">Artist</button>
+                <button id="switchButton" data-name="switch">Pie Chart</button>
             </div>
 
-            <div  id="chart" class="chart-cotainer"></div>
+            <div id="chart" class="chart-cotainer"></div>
             
             <div class="tooltip">
                 <div class="tip-header">
@@ -34,13 +35,15 @@
                 </div>
                 <div class="tip-body"></div>
             </div>
-            <button id="switchButton" data-name="switch">Pie Chart</button>
 
             <div id="youtube-container">
                 <h2 id="songTitle"></h2>
                 <p id="artistName"></p>
-                <a id="videoLink" href="#" target="_blank">影片連結</a>
-                <img id="thumbnail" src="" alt="縮圖">
+                <!-- <a id="videoLink" href="#" target="_blank">影片連結</a> -->
+                <a id="videoLink" href="#" target="_blank"></a>
+                <h4>&nbspwatch YouTube video ⬇️⬇️⬇️&nbsp</h4>
+                <!-- <img id="thumbnail" src="" alt="縮圖"> -->
+                <img id="thumbnail" src="">
                 <p id="viewCount"></p>
                 <p id="likeCount"></p>
                 <p id="commentCount"></p>
