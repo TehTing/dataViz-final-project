@@ -291,3 +291,12 @@ iframe.youtube-iframe{
     position: absolute;
     top: 80px;
 }
+
+  
+  #thumbnail {
+    position:absolute; /* 設定縮圖為絕對定位，以便設定寬度和高度 */
+    width: 50%; /* 設定縮圖的寬度為容器的100% */
+    height: 50%; /* 設定縮圖的高度為容器的100% */
+    object-fit: cover; /* 使用 object-fit: cover 以保持縮圖比例並填滿容器 */
+    transform: translateX(-90%); /*將圖片往左移動50%的寬度*/
+  }
