@@ -5,11 +5,12 @@
 
 body{
     font-family: 'Fjalla One', sans-serif;
+    padding-bottom: 8%;
 }
 
 h1 {
-    background-color: #1ED760;
-    color: white; 
+    /* background-color: #1ED760; */
+    color:  #1ED760; 
     font-family: 'Fjalla One', sans-serif;
     font-size: 60px;
     display: inline;
@@ -18,6 +19,7 @@ h1 {
     top: 5%;
     display: flex;
     justify-content: center;
+    margin: 3% 0% 2%;
 }
 
 h2 {
@@ -27,7 +29,6 @@ h2 {
     display: inline;
     border-radius: 15px;
     position: relative;
-    top: -5%;
     display: flex;
     justify-content: center; 
 }
@@ -52,17 +53,19 @@ button {
     border-bottom-left-radius: 15px;
 }
 
-
-#switchButton{
-    position: absolute;
-    right: 8%;
-    bottom: 49%;
-    height: 40px;
-    width: 40px;
-    border: 1px solid #cdd8d1;
-    border-radius: 20px;
-    font-size: 10px;
+#chart{
+    position: relative;
 }
+    #switchButton{
+        position: absolute;
+        right: 3%;
+        bottom: 8%;
+        height: 40px;
+        width: 40px;
+        border: 1px solid #cdd8d1;
+        border-radius: 20px;
+        font-size: 10px;
+    }
 
 button:hover {
     background-color: #1ED760;
@@ -93,9 +96,10 @@ button:focus {
 }
 
 svg{
-    border :5px solid #1ED760;
+    border: 5px solid #1ED760;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
+    /* width: 100%; */
 }
 
 .axis .domain{
@@ -226,19 +230,19 @@ h4{
 /* 大小容納三部影片 */   /*其實沒有border的話沒有人在乎放幾部影片*/
 #youtube-container{
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     position: relative;
-    top: 5%;
+    top: 4%;
     /* border: 3px solid #1ED760; */
     border-radius: 5px;
     background: #efefefef;
     /* height: 955px; */
-    height: 750px;
-    width: 650px;
+    height: 400px;
+    width: 700px;
 }
     h4{
         position: absolute;
-        top: 2%;
+        top: 6%;
     }
 
 #videoLink{
@@ -247,12 +251,13 @@ h4{
     /* opacity: 0%; */
 }
 
-
 iframe.youtube-iframe{
     display: flex;
     justify-content: center; 
     position: absolute;
-    top: 6%;
+    top: 15%;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 
@@ -268,37 +273,115 @@ iframe.youtube-iframe{
     /* transform: translateX(-90%); 將圖片往左移動50%的寬度 */
 }
 
-  
-/* 在不同螢幕寬度下調整內容的佈局 */
-@media screen and (min-width: 1500px){
-    .screensize {
-        max-width: 100%; /* 縮小容器的寬度 */
+@media screen and (min-width: 992px) and (max-width: 1400px){
+    svg{
+        border: 5px solid #1ED760;
+        border-radius: 15px;
     }
-}
-@media screen and (min-width: 992px) and (max-width: 1199.99px){
-    .screensize {
-        max-width: 90%; /* 縮小容器的寬度 */
+    .controls{
+        display: inline;
+        margin: 0px 0px 15px; /* 上 左右 下 */
     }
-}
-@media screen and (min-width: 768px) and (max-width: 991.99px){
-    .screensize {
-        max-width: 80%; /* 縮小容器的寬度 */
+    button{
+        background-color: #eff1ef00;
+        color: #aebab2;
+        font-size: 18px;
+        font-family: 'Fjalla One', sans-serif;
+        height: 50px;
+        width: 120px;
+        border-radius: 15px;
+    }
+    button:hover{
+        background-color: #1ED760;
+        color :white;
+        font-family: 'Fjalla One', sans-serif;
+        border: none;
+        transition-duration: 0.5s;
+        cursor: pointer;
+    }
+    button:focus {
+        background-color: #1ED760;
+        color :white;
+        font-family: 'Fjalla One', sans-serif;
+        border: none;
+    }
+
+    #pop, #genre, #artist{
+        margin: 10px 30px;
     }
 }
 
-@media screen and (min-width: 480px) and (max-width: 767.99px){
-    .screensize {
-        max-width: 70%; /* 縮小容器的寬度 */
+@media screen and (max-width: 991.99px){
+    svg{
+        border: 5px solid #1ED760;
+        border-radius: 15px;
     }
+    .controls{
+        display: inline;
+        margin: 0px 0px 15px; /* 上 左右 下 */
+    }
+    button{
+        background-color: #eff1ef00;
+        color: #aebab2;
+        font-size: 18px;
+        font-family: 'Fjalla One', sans-serif;
+        height: 60px;
+        width: 100px;
+        border-radius: 15px;
+    }
+    button:hover{
+        background-color: #1ED760;
+        color :white;
+        font-family: 'Fjalla One', sans-serif;
+        border: none;
+        transition-duration: 0.5s;
+        cursor: pointer;
+    }
+    button:focus {
+        background-color: #1ED760;
+        color :white;
+        font-family: 'Fjalla One', sans-serif;
+        border: none;
+    }
+    #pop, #genre, #artist{
+        margin: 10px 20px;
+    }  
 }
+
+  
+/* 在不同螢幕寬度下調整內容的佈局 */
+/* @media screen and (min-width: 1500px){
+    .screensize {
+        max-width: 100%; 縮小容器的寬度
+    }
+} */
+
+/* @media screen and (min-width: 992px) and (max-width: 1199.99px){
+    .screensize {
+        max-width: 90%; 縮小容器的寬度
+    }
+} */
+
+/* @media screen and (min-width: 768px) and (max-width: 991.99px){
+    .screensize {
+        max-width: 80%; 縮小容器的寬度
+    }
+} */
+
+/* @media screen and (min-width: 480px) and (max-width: 767.99px){
+    .screensize {
+        max-width: 70%; 縮小容器的寬度
+    }
+} */
 /* 在更小的螢幕寬度下進一步調整內容的佈局 */
-@media screen and (max-width: 479.99px) {
+/* @media screen and (max-width: 479.99px) {
     .screensize {
-        padding: 10px; /* 縮小內距 */
+        padding: 10px; 縮小內距
     }
-}
-.screensize{
+} */
+
+/* .screensize{
     position: relative;
-    /* top: 30%;  
-    left: 2%; */
-}
+    top: 30%;  
+    left: 2%;
+} */

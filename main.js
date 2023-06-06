@@ -621,6 +621,7 @@ function searchMusic(songName) {
                     const artistName = item.snippet.channelTitle;
                     const thumbnailUrl = item.snippet.thumbnails.default.url;
                     const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
+                    // const videoLink = `https://www.youtube.com/embed/${videoId}`;
 
                     // 檢查影片ID是否已存在，若不存在則將影片資訊加入songs陣列
                     if (!uniqueVideos.has(videoId)) {
