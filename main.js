@@ -495,22 +495,23 @@ function setupCanvas(ChartData) {
 
 
         // pie chart添加標籤
-        // var offset = 1.7;
-        // var textLabels = arcs.append("text")
-        //                     .attr("transform", function (d) {
-        //                         // 計算弧形中心點的位置
-        //                         var centroid = arc.centroid(d);
+        if(metric!="genre"){
+            var offset = 1.7;
+            arcs.append("text")
+                .attr("transform", function (d) {
+                    // 計算弧形中心點的位置
+                    var centroid = arc.centroid(d);
 
-        //                         // 計算文字偏移量
-        //                         var offsetX = centroid[0] * offset; // 調整偏移量的倍數
-        //                         var offsetY = centroid[1] * offset; // 調整偏移量的倍數
-        //                         return "translate(" + offsetX + "," + offsetY + ")";
-        //                     })
-        //                     .attr("text-anchor", "middle")
-        //                     .text(function (d) {
-        //                         return d.data.basis;
-        //                     });
-
+                    // 計算文字偏移量
+                    var offsetX = centroid[0] * offset; // 調整偏移量的倍數
+                    var offsetY = centroid[1] * offset; // 調整偏移量的倍數
+                    return "translate(" + offsetX + "," + offsetY + ")";
+                })
+                .attr("text-anchor", "middle")
+                .text(function (d) {
+                    return d.data.basis;
+                });
+        }
 
 
         // 創建資訊提示框
@@ -621,7 +622,6 @@ function searchMusic(songName) {
                     const artistName = item.snippet.channelTitle;
                     const thumbnailUrl = item.snippet.thumbnails.default.url;
                     const videoLink = `https://www.youtube.com/watch?v=${videoId}`;
-                    // const videoLink = `https://www.youtube.com/embed/${videoId}`;
 
                     // 檢查影片ID是否已存在，若不存在則將影片資訊加入songs陣列
                     if (!uniqueVideos.has(videoId)) {
