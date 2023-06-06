@@ -594,7 +594,7 @@ function setupCanvas(ChartData) {
 
 function searchMusic(songName) {
     // 設定 YouTube Data API 金鑰
-    var apiKey = "AIzaSyC6rf7uoC_Ps9V8NBJUPfsyFJYV1iZtp2Y";
+    var apiKey = "AIzaSyDlgJ5n25FE2-_qVEPmu_Hy7wvNtdBByX8";
 
 
     function searchSong(songName, numResults) {

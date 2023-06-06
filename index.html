@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-        <meta name="description" content="">
-        <link rel="stylesheet" href="style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div class="screensize">
-        <h1>&nbspYoutify&nbsp</h1>
+
+<head>
+    <meta charset="utf-8">
+    <title>Youtify</title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="screensize">
+        <div id="title-banner">
+            <img src="./images/logo.png" alt="youtify logo">
+            <h1>&nbspYoutify&nbsp</h1>
+        </div>
         <h2>
             &nbsp Group 1 &nbsp
             <div>&nbsp&nbsp</div>
             <label class="switch">
                 <input type="checkbox">
-                <span class="slider round" data-name="dark" onclick="darkmode()"></span>   
+                <span class="slider round" data-name="dark" onclick="darkmode()"></span>
             </label>
         </h2>
         <div class="setup">
-            <div class="controls">   
+            <div class="controls">
                 <button id="pop" data-name="pop">Popularity</button>
                 <button id="genre" data-name="genre">Genre</button>
                 <button id="artist" data-name="artist">Artist</button>
@@ -28,7 +33,7 @@
             <div id="chart" class="chart-cotainer">
                 <button id="switchButton" data-name="switch">Pie Chart</button>
             </div>
-            
+
             <div class="tooltip">
                 <div class="tip-header">
                     <h3></h3>
@@ -50,13 +55,14 @@
                 <p id="commentCount"></p>
             </div>
         </div>
-        </div>
-        
-        <script src="//unpkg.com/d3"></script>
-        <script src="main.js"></script>
-        <script src="https://www.youtube.com/iframe_api"></script>
-        <script src="https://unpkg.com/d3@7.1.1/dist/d3.min.js"></script>
-         <!-- 引入 d3-scale-chromatic 擴展庫 -->
-         <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
-    </body>
+    </div>
+
+    <script src="//unpkg.com/d3"></script>
+    <script src="main.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://unpkg.com/d3@7.1.1/dist/d3.min.js"></script>
+    <!-- 引入 d3-scale-chromatic 擴展庫 -->
+    <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+</body>
+
 </html>
